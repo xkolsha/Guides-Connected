@@ -1,10 +1,13 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
+import React from "react"; // Importing React
+import ReactDOM from "react-dom/client"; // Importing ReactDOM from the new React 18 API
+import App from "./App.jsx"; // Importing the main App component
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+// Creating a root element
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// Rendering the App component inside the root element
+root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);
