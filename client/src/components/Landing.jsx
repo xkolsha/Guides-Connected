@@ -16,10 +16,10 @@ const Landing = () => {
       >
         {/* Container constrains the content width */}
         <Container maxWidth="lg" sx={{ py: 8 }}>
-          <Grid container spacing={4}>
+          <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={6}>
               {/* Text and list content */}
-              <Typography variant="h3" gutterBottom sx={{ fontWeight: "bold" }}>
+              <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
                 Professional Learning
               </Typography>
               <Typography variant="body1" gutterBottom>
@@ -59,7 +59,7 @@ const Landing = () => {
           <Grid container>
             <Grid item xs={12}>
               {/* Call to action text and buttons */}
-              <Typography variant="h3" gutterBottom>
+              <Typography variant="h4" gutterBottom>
                 Ready to get started?
               </Typography>
               <Button variant="contained" sx={{ marginRight: 2 }}>
@@ -79,14 +79,14 @@ const Landing = () => {
         }}
       >
         <Container maxWidth="lg" sx={{ py: 8 }}>
-          <Grid container spacing={4}>
+          <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={6} sx={{ order: { xs: 2, md: 1 } }}>
               {/* Placeholder for image */}
               <Paper elevation={3} sx={{ height: 360, width: "100%" }} />
             </Grid>
             <Grid item xs={12} md={6} sx={{ order: { xs: 1, md: 2 } }}>
               {/* Classroom enrichment content */}
-              <Typography variant="h3" gutterBottom sx={{ fontWeight: "bold" }}>
+              <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
                 Classroom Enrichment
               </Typography>
               <Typography variant="body1">
@@ -108,10 +108,10 @@ const Landing = () => {
         }}
       >
         <Container maxWidth="lg" sx={{ py: 8 }}>
-          <Grid container spacing={4}>
+          <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={6}>
               {/* Content describing values */}
-              <Typography variant="h3" gutterBottom sx={{ fontWeight: "bold" }}>
+              <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
                 We are Driven by Values
               </Typography>
               <Typography variant="body1">

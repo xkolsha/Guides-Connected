@@ -74,7 +74,7 @@ const Testimonials = () => {
       }}
     >
       <Typography
-        variant="h3"
+        variant="h4"
         gutterBottom
         textAlign="center"
         fontWeight={"bold"}
@@ -83,11 +83,22 @@ const Testimonials = () => {
         What our customers say.
       </Typography>
       <Swiper
-        spaceBetween={50}
-        slidesPerView={1}
-        navigation
+        spaceBetween={30}
+        slidesPerView={1} // Default is 1 slide per view for small screens
+        navigation={true}
         pagination={{ clickable: true }}
-        scrollbar={{ draggable: true }}
+        breakpoints={{
+          // When window width is >= 640px
+          640: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          // When window width is >= 1024px
+          1024: {
+            slidesPerView: 3,
+            spaceBetween: 30,
+          },
+        }}
       >
         {testimonials.map((testimonial, index) => (
           <SwiperSlide key={index}>
