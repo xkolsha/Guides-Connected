@@ -17,8 +17,10 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-material-ui-carousel": "^3.4.2",
     "react-router-dom": "^6.19.0",
-    "styled-components": "^6.1.1"
+    "styled-components": "^6.1.1",
+    "swiper": "^11.0.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.37",

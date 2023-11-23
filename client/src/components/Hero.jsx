@@ -11,15 +11,15 @@ const Hero = () => {
           md={6}
           sx={{ textAlign: { xs: "center", md: "left" } }}
         >
-          <Typography variant="h1" gutterBottom>
+          <Typography variant="h1" gutterBottom sx={{ fontWeight: "bold" }}>
             Guides Connected
           </Typography>
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="h4" gutterBottom>
             Expert guides for any subject. Instant access customized for you
           </Typography>
           <Box sx={{ mt: 3 }}>
             <Button variant="contained" color="primary" sx={{ mr: 3 }}>
-              WORK With Us{" "}
+              Work With Us{" "}
             </Button>
             <Button variant="outlined" color="primary">
               Learn More
@@ -34,7 +34,7 @@ const Hero = () => {
               width: "100%",
               maxWidth: 1080,
             }}
-            alt="Descriptive Alt Text"
+            alt="Education Hero"
             src={HeroPhoto}
           />
         </Grid>
