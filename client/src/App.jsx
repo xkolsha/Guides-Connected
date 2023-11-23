@@ -3,6 +3,7 @@ import { ThemeProvider, Box } from "@mui/material";
 import theme from "./theme";
 import Hero from "./components/Hero";
 import Landing from "./components/Landing";
+import Footer from "./components/Footer";
 import Testimonials from "./components/Testimonials";
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
           <Hero id="hero" />
           <Testimonials id="testimonials" />
           <Landing id="landing" />
+          <Footer id="footer" />
         </Box>
       </Router>
     </ThemeProvider>
