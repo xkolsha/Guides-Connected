@@ -1,5 +1,6 @@
 import { Typography, Avatar, Box, Paper } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useTheme } from "@mui/material/styles";
 
 // Import Swiper styles
 import "swiper/css";
@@ -62,8 +63,16 @@ const testimonials = [
 ];
 
 const Testimonials = () => {
+  const theme = useTheme();
   return (
-    <Box sx={{ width: "100%", py: 8, bgcolor: "background.default" }}>
+    <Box
+      sx={{
+        width: "100%",
+        py: 8,
+        bgcolor: theme.palette.background.paper,
+        color: theme.palette.primary.main,
+      }}
+    >
       <Typography
         variant="h3"
         gutterBottom
@@ -82,7 +91,16 @@ const Testimonials = () => {
       >
         {testimonials.map((testimonial, index) => (
           <SwiperSlide key={index}>
-            <Paper elevation={3} sx={{ p: 4, mx: "auto", maxWidth: 345 }}>
+            <Paper
+              elevation={3}
+              sx={{
+                p: 4,
+                mx: "auto",
+                maxWidth: 345,
+                bgcolor: theme.palette.primary.contrastText,
+                color: theme.palette.primary.main,
+              }}
+            >
               <Avatar
                 src={testimonial.photo}
                 alt={testimonial.name}

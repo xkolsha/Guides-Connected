@@ -10,8 +10,8 @@ const Landing = () => {
       {/* This Box has a full-width background color */}
       <Box
         sx={{
-          bgcolor: theme.palette.primary.contrastText,
-          color: theme.palette.primary.main,
+          bgcolor: theme.palette.primary.main,
+          color: theme.palette.background.default,
         }}
       >
         {/* Container constrains the content width */}
@@ -51,7 +51,7 @@ const Landing = () => {
       {/* Second Section: Call to Action */}
       <Box
         sx={{
-          bgcolor: theme.palette.primary.light,
+          bgcolor: theme.palette.primary.paper,
           color: theme.palette.primary.main,
         }}
       >
@@ -74,8 +74,8 @@ const Landing = () => {
       {/* Third Section: Classroom Enrichment */}
       <Box
         sx={{
-          bgcolor: theme.palette.secondary.main,
-          color: theme.palette.secondary.contrastText,
+          bgcolor: theme.palette.primary.light,
+          color: theme.palette.primary.main,
         }}
       >
         <Container maxWidth="lg" sx={{ py: 8 }}>
@@ -103,8 +103,8 @@ const Landing = () => {
       {/* Repeating the structure for consistency */}
       <Box
         sx={{
-          bgcolor: theme.palette.primary.main,
-          color: theme.palette.primary.contrastText,
+          bgcolor: theme.palette.primary.contrastText,
+          color: theme.palette.primary.main,
         }}
       >
         <Container maxWidth="lg" sx={{ py: 8 }}>
