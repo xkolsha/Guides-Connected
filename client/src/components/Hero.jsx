@@ -8,13 +8,15 @@ const Hero = () => {
   return (
     <Box
       sx={{
+        py: 12,
+        maxHeight: "100vh",
         bgcolor: theme.palette.background.default,
         color: theme.palette.primary.main,
       }}
     >
       {/* Container to constrain the content width and center it */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Grid container spacing={4} alignItems="center">
+      <Container maxWidth="xg" sx={{ py: 6 }}>
+        <Grid container spacing={12} alignItems="center">
           {/* Text content */}
           <Grid item xs={12} md={6}>
             <Typography
@@ -31,7 +33,7 @@ const Hero = () => {
             <Typography variant="h4" gutterBottom>
               Expert guides for any subject. Instant access customized for you
             </Typography>
-            <Box sx={{ mt: 3 }}>
+            <Box sx={{ mt: 4 }}>
               <Button variant="contained" color="primary" sx={{ mr: 3 }}>
                 Work With Us
               </Button>

@@ -66,6 +66,7 @@ const Testimonials = () => {
   const theme = useTheme();
   return (
     <Box
+      maxWidth="xg"
       sx={{
         width: "100%",
         py: 8,
@@ -80,7 +81,7 @@ const Testimonials = () => {
         fontWeight={"bold"}
         mb={6}
       >
-        What our customers say.
+        What Our Customers Say.
       </Typography>
       <Swiper
         spaceBetween={30}
