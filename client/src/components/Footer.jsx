@@ -21,8 +21,13 @@ const Footer = () => {
           alignItems="center"
         >
           <Grid item xs={12} md="auto">
-            <Typography variant="h6" color="inherit" textAlign="center">
-              LOGO
+            <Typography
+              variant="h6"
+              color="inherit"
+              textAlign="center"
+              sx={{ fontWeight: "bold" }}
+            >
+              Guides Connected.
             </Typography>
           </Grid>
           <Grid item xs={12} md="auto" textAlign="center">

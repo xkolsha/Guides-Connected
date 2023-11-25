@@ -9,13 +9,13 @@ const Hero = () => {
     <Box
       sx={{
         py: 12,
-        maxHeight: "100vh",
+        maxHeight: "100svh",
         bgcolor: theme.palette.background.default,
         color: theme.palette.primary.main,
       }}
     >
       {/* Container to constrain the content width and center it */}
-      <Container maxWidth="xg" sx={{ py: 6 }}>
+      <Container maxWidth="lg" sx={{ py: 6 }}>
         <Grid container spacing={12} alignItems="center">
           {/* Text content */}
           <Grid item xs={12} md={6}>

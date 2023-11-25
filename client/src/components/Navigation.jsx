@@ -16,6 +16,7 @@ import {
   Container,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { Link } from "react-router-dom";
 
 function HideOnScroll(props) {
   const { children, window } = props;
@@ -37,12 +38,14 @@ HideOnScroll.propTypes = {
 
 const Navigation = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
 
-  const handleDrawerToggle = () => {
-    setDrawerOpen(!drawerOpen);
-  };
-
-  const navItems = ["Home", "About", "Our Experts", "Categories"];
+  const navItems = [
+    { label: "Home", path: "/" },
+    { label: "About", path: "/about" },
+    { label: "Our Experts", path: "/experts" },
+    { label: "Categories", path: "/categories" },
+  ];
 
   return (
     <>
@@ -51,9 +54,7 @@ const Navigation = () => {
           position="fixed"
           color="primary"
           elevation={4}
-          sx={{
-            zIndex: (theme) => theme.zIndex.drawer + 1,
-          }}
+          sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
           <Container maxWidth="xl">
             <Toolbar disableGutters>
@@ -64,7 +65,6 @@ const Navigation = () => {
               >
                 Guides Connected.
               </Typography>
-
               <Box
                 sx={{
                   flexGrow: 1,
@@ -74,19 +74,22 @@ const Navigation = () => {
               >
                 {navItems.map((item, index) => (
                   <Button
+                    component={Link}
+                    to={item.path}
                     key={index}
                     sx={{
                       color: "background.paper",
                       "&:hover": { color: "primary.light" },
                     }}
                   >
-                    {item}
+                    {item.label}
                   </Button>
                 ))}
               </Box>
-              {/* Show the Contact Us button on medium and larger screens */}
               <Button
                 variant="outlined"
+                component={Link}
+                to="/contact"
                 sx={{
                   color: "background.paper",
                   borderColor: "background.paper",
@@ -117,9 +120,7 @@ const Navigation = () => {
         anchor="right"
         open={drawerOpen}
         onClose={handleDrawerToggle}
-        ModalProps={{
-          keepMounted: true,
-        }}
+        ModalProps={{ keepMounted: true }}
       >
         <Box
           sx={{ width: 250 }}
@@ -129,12 +130,11 @@ const Navigation = () => {
         >
           <List>
             {navItems.map((item, index) => (
-              <ListItemButton key={index}>
-                <ListItemText primary={item} />
+              <ListItemButton component={Link} to={item.path} key={index}>
+                <ListItemText primary={item.label} />
               </ListItemButton>
             ))}
-            {/* Contact Us button inside the drawer */}
-            <ListItemButton>
+            <ListItemButton component={Link} to="/contact">
               <Button sx={{ color: "primary.main", width: "100%" }}>
                 Contact Us
               </Button>
