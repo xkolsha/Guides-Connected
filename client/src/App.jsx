@@ -6,7 +6,10 @@ import Hero from "./components/Hero";
 import Landing from "./components/Landing";
 import Footer from "./components/Footer";
 import Testimonials from "./components/Testimonials";
-import About from "./components/About"; // Import your About component
+import About from "./components/About";
+import OurExperts from "./components/OurExperts";
+import Categories from "./components/Categories";
+import ExpertDetail from "./components/ExpertDetail";
 
 function App() {
   return (
@@ -34,6 +37,9 @@ function App() {
             />
             {/* About Route */}
             <Route path="/about" element={<About />} />
+            <Route path="/experts" element={<OurExperts />} />
+            <Route path="/categories" element={<Categories />} />
+            <Route path="/expert" element={<ExpertDetail />} />
             {/* Add more routes as needed */}
           </Routes>
         </Box>

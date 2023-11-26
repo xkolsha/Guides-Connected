@@ -93,6 +93,7 @@ const Navigation = () => {
                 sx={{
                   color: "background.paper",
                   borderColor: "background.paper",
+                  fontWeight: "bold",
                   ml: 1,
                   "&:hover": {
                     color: "primary.light",
@@ -123,6 +124,7 @@ const Navigation = () => {
         ModalProps={{ keepMounted: true }}
       >
         <Box
+          pt={8}
           sx={{ width: 250 }}
           role="presentation"
           onClick={handleDrawerToggle}
@@ -135,7 +137,14 @@ const Navigation = () => {
               </ListItemButton>
             ))}
             <ListItemButton component={Link} to="/contact">
-              <Button sx={{ color: "primary.main", width: "100%" }}>
+              <Button
+                sx={{
+                  color: "primary.light",
+                  bgcolor: "primary.main",
+                  width: "100%",
+                  fontWeight: "bold",
+                }}
+              >
                 Contact Us
               </Button>
             </ListItemButton>
