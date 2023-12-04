@@ -12,21 +12,23 @@ import {
 } from "../queries/adminQueries.jsx";
 
 const AdminDashboard = () => {
-  // State for handling UI and form data
+  // State for handling selected items, form mode, and form data
   const [selectedItem, setSelectedItem] = useState(null);
   const [formMode, setFormMode] = useState("add"); // 'add' or 'edit'
   const [formData, setFormData] = useState({
     name: "",
     title: "",
     description: "",
+    biography: "",
   });
   const [currentEditingType, setCurrentEditingType] = useState("expert"); // 'expert' or 'category'
 
-  // Query and Mutation Hooks
+  // Query hooks to fetch experts and categories data
   const { data: expertsData, refetch: refetchExperts } = useQuery(GET_EXPERTS);
   const { data: categoriesData, refetch: refetchCategories } =
     useQuery(GET_CATEGORIES);
 
+  // Mutation hooks for CRUD operations on experts and categories
   const [addExpert] = useMutation(ADD_EXPERT, {
     onCompleted: () => refetchExperts(),
   });
@@ -36,7 +38,6 @@ const AdminDashboard = () => {
   const [deleteExpert] = useMutation(DELETE_EXPERT, {
     onCompleted: () => refetchExperts(),
   });
-
   const [addCategory] = useMutation(ADD_CATEGORY, {
     onCompleted: () => refetchCategories(),
   });
@@ -47,7 +48,7 @@ const AdminDashboard = () => {
     onCompleted: () => refetchCategories(),
   });
 
-  // Handler functions for Edit and Delete
+  // Handler for editing items
   const handleEditClick = (item, type) => {
     setSelectedItem(item);
     setFormMode("edit");
@@ -56,9 +57,11 @@ const AdminDashboard = () => {
       name: item.name,
       title: item.title || "",
       description: item.description || "",
+      biography: item.biography || "",
     });
   };
 
+  // Handler for deleting items
   const handleDeleteClick = async (id, type) => {
     if (type === "expert") {
       await deleteExpert({ variables: { id } });
@@ -67,18 +70,24 @@ const AdminDashboard = () => {
     }
   };
 
+  // Handler for adding new items
   const handleAddNewClick = (type) => {
     setSelectedItem(null);
     setFormMode("add");
     setCurrentEditingType(type);
-    setFormData({ name: "", title: "", description: "" });
+    setFormData({ name: "", title: "", description: "", biography: "" });
   };
 
+  // Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (currentEditingType === "expert") {
-        const expertData = { name: formData.name, title: formData.title };
+        const expertData = {
+          name: formData.name,
+          title: formData.title,
+          biography: formData.biography,
+        };
         if (formMode === "add") {
           await addExpert({ variables: { expertData } });
         } else {
@@ -100,7 +109,7 @@ const AdminDashboard = () => {
         }
       }
       setSelectedItem(null);
-      setFormData({ name: "", title: "", description: "" });
+      setFormData({ name: "", title: "", description: "", biography: "" });
       setFormMode("add");
     } catch (error) {
       console.error("Error handling form submission:", error);
@@ -111,6 +120,7 @@ const AdminDashboard = () => {
   return (
     <div>
       <h1>Admin Dashboard</h1>
+
       {/* Experts Section */}
       <div>
         <h2>Experts</h2>
@@ -166,18 +176,44 @@ const AdminDashboard = () => {
               required
             />
           </div>
+
+          {/* Conditional rendering based on currentEditingType */}
           {currentEditingType === "expert" && (
+            <>
+              <div>
+                <label>Title:</label>
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <label>Biography:</label>
+                <textarea
+                  value={formData.biography}
+                  onChange={(e) =>
+                    setFormData({ ...formData, biography: e.target.value })
+                  }
+                />
+              </div>
+            </>
+          )}
+
+          {currentEditingType === "category" && (
             <div>
-              <label>Title:</label>
-              <input
-                type="text"
-                value={formData.title}
+              <label>Description:</label>
+              <textarea
+                value={formData.description}
                 onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
+                  setFormData({ ...formData, description: e.target.value })
                 }
               />
             </div>
           )}
+
           <div>
             <button type="submit">
               {formMode === "add" ? "Add" : "Update"} {currentEditingType}
