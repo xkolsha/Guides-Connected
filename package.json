@@ -8,8 +8,7 @@
     "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm run dev\"",
     "install-all": "cd server && npm install && cd ../client && npm install",
     "seed": "cd server && npm run seed",
-    "build": "cd client && npm run build"
-  },
+    "build": "cd client && npm install && npm list && npm run build"  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "concurrently": "^8.2.1"
