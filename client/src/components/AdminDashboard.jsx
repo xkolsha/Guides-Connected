@@ -18,10 +18,12 @@ import {
   Typography,
   Box,
   TextareaAutosize,
+  Tabs,
+  Tab,
 } from "@mui/material";
 
 const AdminDashboard = () => {
-  // State for handling UI and form data
+  // State for handling form data and UI
   const [selectedItem, setSelectedItem] = useState(null);
   const [formMode, setFormMode] = useState("add"); // 'add' or 'edit'
   const [formData, setFormData] = useState({
@@ -32,7 +34,15 @@ const AdminDashboard = () => {
   });
   const [currentEditingType, setCurrentEditingType] = useState("expert"); // 'expert' or 'category'
 
-  // Query and Mutation Hooks
+  // State for managing the active tab in sub-navigation
+  const [activeTab, setActiveTab] = useState(0);
+
+  // Handler for tab change in sub-navigation
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
+
+  // Apollo Client hooks for fetching and manipulating data
   const { data: expertsData, refetch: refetchExperts } = useQuery(GET_EXPERTS);
   const { data: categoriesData, refetch: refetchCategories } =
     useQuery(GET_CATEGORIES);
@@ -57,7 +67,7 @@ const AdminDashboard = () => {
     onCompleted: () => refetchCategories(),
   });
 
-  // Handler for editing items
+  // Handler functions for CRUD operations
   const handleEditClick = (item, type) => {
     setSelectedItem(item);
     setFormMode("edit");
@@ -70,7 +80,6 @@ const AdminDashboard = () => {
     });
   };
 
-  // Handler for deleting items
   const handleDeleteClick = async (id, type) => {
     if (type === "expert") {
       await deleteExpert({ variables: { id } });
@@ -79,7 +88,6 @@ const AdminDashboard = () => {
     }
   };
 
-  // Handler for adding new items
   const handleAddNewClick = (type) => {
     setSelectedItem(null);
     setFormMode("add");
@@ -87,7 +95,6 @@ const AdminDashboard = () => {
     setFormData({ name: "", title: "", description: "", biography: "" });
   };
 
-  // Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -125,7 +132,7 @@ const AdminDashboard = () => {
     }
   };
 
-  // Render UI components with MUI
+  // Main component render
   return (
     <Box
       sx={{
@@ -143,16 +150,19 @@ const AdminDashboard = () => {
         Admin Dashboard
       </Typography>
 
-      {/* Experts Section */}
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Experts
-            </Typography>
+      {/* Sub-navigation Tabs */}
+      <Tabs value={activeTab} onChange={handleTabChange} centered sx={{ p: 4 }}>
+        <Tab label="Manage Experts" />
+        <Tab label="Manage Categories" />
+      </Tabs>
+
+      {/* Conditional Rendering of Experts and Categories Management Sections */}
+      {activeTab === 0 && (
+        <Grid item xs={12} md={6} mb={3}>
+          <Paper sx={{ p: 6 }}>
             {expertsData?.getExperts.map((expert) => (
-              <Box key={expert._id} sx={{ mb: 2 }}>
-                <Typography variant="body1">
+              <Box key={expert._id} sx={{ mb: 3 }}>
+                <Typography variant="body1" mb={1}>
                   {expert.name} - {expert.title}
                 </Typography>
                 <Button
@@ -165,7 +175,7 @@ const AdminDashboard = () => {
                 </Button>
                 <Button
                   variant="outlined"
-                  color="secondary"
+                  color="error"
                   onClick={() => handleDeleteClick(expert._id, "expert")}
                 >
                   Delete
@@ -174,22 +184,23 @@ const AdminDashboard = () => {
             ))}
             <Button
               variant="contained"
+              color="secondary"
               onClick={() => handleAddNewClick("expert")}
+              sx={{ mt: 1 }}
             >
               Add Expert
             </Button>
           </Paper>
         </Grid>
-
-        {/* Categories Section */}
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              Categories
-            </Typography>
+      )}
+      {activeTab === 1 && (
+        <Grid item xs={12} md={6} mb={3}>
+          <Paper sx={{ p: 6 }}>
             {categoriesData?.getCategories.map((category) => (
-              <Box key={category._id} sx={{ mb: 2 }}>
-                <Typography variant="body1">{category.name}</Typography>
+              <Box key={category._id} sx={{ mb: 3 }}>
+                <Typography variant="body1" mb={1}>
+                  {category.name}
+                </Typography>
                 <Button
                   variant="contained"
                   color="primary"
@@ -200,7 +211,7 @@ const AdminDashboard = () => {
                 </Button>
                 <Button
                   variant="outlined"
-                  color="secondary"
+                  color="error"
                   onClick={() => handleDeleteClick(category._id, "category")}
                 >
                   Delete
@@ -209,81 +220,79 @@ const AdminDashboard = () => {
             ))}
             <Button
               variant="contained"
+              color="secondary"
               onClick={() => handleAddNewClick("category")}
             >
               Add Category
             </Button>
           </Paper>
         </Grid>
+      )}
 
-        {/* Form for Adding/Editing Experts or Categories */}
-        <Grid item xs={12}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="h6">
-              {formMode === "add"
-                ? `Add New ${currentEditingType}`
-                : `Edit ${currentEditingType}`}
-            </Typography>
-            <form onSubmit={handleSubmit}>
-              <TextField
-                label="Name"
-                variant="outlined"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                required
-                fullWidth
-                margin="normal"
-              />
-
-              {currentEditingType === "expert" && (
-                <>
-                  <TextField
-                    label="Title"
-                    variant="outlined"
-                    value={formData.title}
-                    onChange={(e) =>
-                      setFormData({ ...formData, title: e.target.value })
-                    }
-                    fullWidth
-                    margin="normal"
-                  />
-                  <TextareaAutosize
-                    minRows={3}
-                    placeholder="Biography"
-                    value={formData.biography}
-                    onChange={(e) =>
-                      setFormData({ ...formData, biography: e.target.value })
-                    }
-                    style={{ width: "100%", marginTop: "8px" }}
-                  />
-                </>
-              )}
-
-              {currentEditingType === "category" && (
+      {/* Form for Adding/Editing Experts or Categories */}
+      <Grid item xs={12}>
+        <Paper sx={{ p: 3 }}>
+          <Typography variant="h6">
+            {formMode === "add"
+              ? `Add New ${currentEditingType}`
+              : `Edit ${currentEditingType}`}
+          </Typography>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              label="Name"
+              variant="outlined"
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+              required
+              fullWidth
+              margin="normal"
+            />
+            {currentEditingType === "expert" && (
+              <>
+                <TextField
+                  label="Title"
+                  variant="outlined"
+                  value={formData.title}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                  fullWidth
+                  margin="normal"
+                />
                 <TextareaAutosize
                   minRows={3}
-                  placeholder="Description"
-                  value={formData.description}
+                  placeholder="Biography"
+                  value={formData.biography}
                   onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
+                    setFormData({ ...formData, biography: e.target.value })
                   }
                   style={{ width: "100%", marginTop: "8px" }}
                 />
-              )}
-
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                sx={{ mt: 2 }}
-              >
-                {formMode === "add" ? "Add" : "Update"} {currentEditingType}
-              </Button>
-            </form>
-          </Paper>
-        </Grid>
+              </>
+            )}
+            {currentEditingType === "category" && (
+              <TextareaAutosize
+                minRows={3}
+                placeholder="Description"
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+                style={{ width: "100%", marginTop: "8px" }}
+              />
+            )}
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{ mt: 2 }}
+            >
+              {formMode === "add" ? "Add" : "Update"} {currentEditingType}
+            </Button>
+          </form>
+        </Paper>
       </Grid>
     </Box>
   );
