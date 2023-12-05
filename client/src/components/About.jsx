@@ -13,6 +13,10 @@ import {
   Link,
 } from "@mui/material";
 import storyImg from "../assets/images/ImgOurStory.webp";
+import expertImg from "../assets/images/Experts.gif";
+import selectImg from "../assets/images/Select.gif";
+import pickImg from "../assets/images/Pick.gif";
+import collabImg from "../assets/images/Collaborate.gif";
 
 // Steps for the stepper
 const steps = [
@@ -59,7 +63,7 @@ const About = () => {
           bgcolor: "background.paper",
           color: "primary.main",
           py: 6,
-          mt: 12,
+          mt: 6,
         }}
       >
         <Container maxWidth="lg">
@@ -225,7 +229,6 @@ const About = () => {
                     </Typography>
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    {/* Replace with your desired image */}
                     <Box
                       component="img"
                       sx={{
@@ -233,8 +236,16 @@ const About = () => {
                         height: "auto",
                         borderRadius: "8px",
                       }}
-                      alt="Your image description"
-                      src={`path_to_your_image_for_${index}.jpg`} // Replace with your image path
+                      alt={`Step ${index + 1}`}
+                      src={
+                        index === 0
+                          ? selectImg
+                          : index === 1
+                          ? pickImg
+                          : index === 2
+                          ? expertImg
+                          : collabImg
+                      }
                     />
                   </Grid>
                 </Grid>
@@ -268,7 +279,6 @@ const About = () => {
           </Paper>
         )}
       </Container>
-
       {/* Meet Our Experts Section */}
       <Container maxWidth="lg" sx={{ py: 6, textAlign: "center" }}>
         <Typography variant="h3" gutterBottom fontWeight={"bold"}>
