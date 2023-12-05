@@ -1,6 +1,7 @@
 import { Typography, Button, Box, Grid, Container } from "@mui/material";
 import HeroPhoto from "../assets/images/Hero.svg";
 import { useTheme } from "@mui/material/styles";
+import WaveBackground from "../assets/images/WaveBackground.svg";
 
 const Hero = () => {
   const theme = useTheme();
@@ -9,9 +10,15 @@ const Hero = () => {
     <Box
       sx={{
         py: 12,
-        maxHeight: "100svh",
         bgcolor: theme.palette.background.default,
         color: theme.palette.primary.main,
+        position: "relative",
+        backgroundImage: `url(${WaveBackground})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+        overflow: "hidden",
       }}
     >
       {/* Container to constrain the content width and center it */}

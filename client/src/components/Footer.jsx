@@ -27,17 +27,18 @@ const Footer = () => {
               textAlign="center"
               sx={{ fontWeight: "bold" }}
             >
-              Guides Connected.
+              Guides Connected
+              <span style={{ color: "#FF5733" }}>.</span>{" "}
             </Typography>
           </Grid>
           <Grid item xs={12} md="auto" textAlign="center">
-            <Link href="#" underline="none" color="inherit" sx={{ mx: 4 }}>
+            <Link href="#" underline="none" color="inherit" sx={{ mx: 3 }}>
               About
             </Link>
-            <Link href="#" underline="none" color="inherit" sx={{ mx: 4 }}>
+            <Link href="#" underline="none" color="inherit" sx={{ mx: 3 }}>
               Experts
             </Link>
-            <Link href="#" underline="none" color="inherit" sx={{ mx: 4 }}>
+            <Link href="#" underline="none" color="inherit" sx={{ mx: 3 }}>
               Contact Us
             </Link>
           </Grid>

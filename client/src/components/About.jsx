@@ -59,7 +59,7 @@ const About = () => {
           bgcolor: "background.paper",
           color: "primary.main",
           py: 6,
-          mt: 12,
+          mt: 6,
         }}
       >
         <Container maxWidth="lg">

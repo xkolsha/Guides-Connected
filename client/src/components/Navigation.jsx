@@ -63,7 +63,8 @@ const Navigation = () => {
                 component="div"
                 sx={{ flexGrow: 1, fontWeight: "bold" }}
               >
-                Guides Connected.
+                Guides Connected
+                <span style={{ color: "#FF5733" }}>.</span>{" "}
               </Typography>
               <Box
                 sx={{
