@@ -1,4 +1,3 @@
-// OurExperts.jsx
 import { useState } from "react";
 import {
   Box,
@@ -9,31 +8,19 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-
-// Example data - replace with actual data source
-const expertsData = [
-  {
-    id: 1,
-    name: "Expert 1",
-    title: "Field 1",
-    imageUrl: "/path/to/image1.jpg",
-    bio: "Short bio...",
-  },
-  {
-    id: 2,
-    name: "Expert 2",
-    title: "Field 2",
-    imageUrl: "/path/to/image2.jpg",
-    bio: "Short bio...",
-  },
-  // ... more experts
-];
+import { useQuery } from "@apollo/client";
+import { GET_EXPERTS } from "../queries/adminQueries.jsx";
+import { Link } from "react-router-dom";
 
 const OurExperts = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const { loading, error, data } = useQuery(GET_EXPERTS);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
 
   // Filter experts based on the search term
-  const filteredExperts = expertsData.filter((expert) =>
+  const filteredExperts = data.getExperts.filter((expert) =>
     expert.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -48,24 +35,31 @@ const OurExperts = () => {
       />
       <Grid container spacing={3}>
         {filteredExperts.map((expert) => (
-          <Grid item xs={12} sm={6} md={4} key={expert.id}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="140"
-                image={expert.imageUrl}
-                alt={expert.name}
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {expert.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {expert.title}
-                </Typography>
-                {/* Optional: Add more details or a button to open a modal/hover card */}
-              </CardContent>
-            </Card>
+          <Grid item xs={12} sm={6} md={4} key={expert._id}>
+            {" "}
+            {/* Use expert._id or a unique identifier */}
+            <Link
+              to={`/experts/${expert._id}`}
+              style={{ textDecoration: "none" }}
+            >
+              <Card>
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={expert.imageUrl}
+                  alt={expert.name}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {expert.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {expert.title}
+                  </Typography>
+                  {/* Optional: Add more details or a button to open a modal/hover card */}
+                </CardContent>
+              </Card>
+            </Link>
           </Grid>
         ))}
       </Grid>

@@ -106,6 +106,17 @@ export const GET_EXPERTS = gql`
   }
 `;
 
+export const GET_EXPERT_BY_ID = gql`
+  query GetExpertById($id: ID!) {
+    getExpertById(id: $id) {
+      _id
+      name
+      title
+      biography
+    }
+  }
+`;
+
 export const ADD_EXPERT = gql`
   mutation AddExpert($expertData: ExpertInput!) {
     addExpert(expertData: $expertData) {

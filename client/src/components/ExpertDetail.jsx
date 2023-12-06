@@ -1,25 +1,26 @@
-// ExpertDetail.jsx
-import { Box, Typography, Button, Paper, Container } from "@mui/material";
-
-// Example expert data - replace with actual data from your database or API
-const expertData = {
-  name: "Dr. Jane Doe",
-  title: "Astrophysicist",
-  biography:
-    "Dr. Jane Doe is a renowned astrophysicist known for her groundbreaking research on black holes...",
-  expertise: "Black Holes, Dark Matter, Astrophysics",
-  publications: [
-    {
-      title: "Research on Black Holes",
-      link: "https://example.com/blackholes",
-    },
-    // ... more publications
-  ],
-  contactEmail: "jane.doe@example.com",
-  videoUrl: "/path/to/introduction-video.mp4", // Replace with actual video URL
-};
+import {
+  Box,
+  Typography,
+  Button,
+  Paper,
+  Container,
+  CircularProgress,
+} from "@mui/material";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { GET_EXPERT_BY_ID } from "../queries/adminQueries.jsx";
 
 const ExpertDetail = () => {
+  const { id } = useParams();
+  const { loading, error, data } = useQuery(GET_EXPERT_BY_ID, {
+    variables: { id },
+  });
+
+  if (loading) return <CircularProgress />;
+  if (error) return <p>Error: {error.message}</p>;
+
+  const expertData = data.getExpertById;
+
   return (
     <Container maxWidth="lg">
       <Box sx={{ my: 4 }}>
