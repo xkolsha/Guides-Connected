@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-// Admin-related queries and mutations
+// Queries and mutations related to the Admin entity
 export const GET_ADMINS = gql`
   query GetAdmins {
     getAdmins {
@@ -45,7 +45,7 @@ export const DELETE_ADMIN = gql`
   }
 `;
 
-// Category-related queries and mutations
+// Queries and mutations related to the Category entity
 export const GET_CATEGORIES = gql`
   query GetCategories {
     getCategories {
@@ -94,7 +94,7 @@ export const DELETE_CATEGORY = gql`
   }
 `;
 
-// Expert-related queries and mutations
+// Queries and mutations related to the Expert entity
 export const GET_EXPERTS = gql`
   query GetExperts {
     getExperts {
@@ -107,14 +107,19 @@ export const GET_EXPERTS = gql`
   }
 `;
 
-export const GET_EXPERT_BY_ID = gql`
-  query GetExpertById($id: ID!) {
-    getExpertById(id: $id) {
+export const GET_EXPERT = gql`
+  query GetExpert($id: ID!) {
+    getExpert(id: $id) {
       _id
       name
       title
       biography
       image
+      categories {
+        _id
+        name
+        description
+      }
     }
   }
 `;
@@ -127,6 +132,11 @@ export const ADD_EXPERT = gql`
       title
       biography
       image
+      categories {
+        _id
+        name
+        description
+      }
     }
   }
 `;
@@ -139,6 +149,11 @@ export const UPDATE_EXPERT = gql`
       title
       biography
       image
+      categories {
+        _id
+        name
+        description
+      }
     }
   }
 `;
@@ -163,7 +178,7 @@ export default {
   ADD_CATEGORY,
   UPDATE_CATEGORY,
   DELETE_CATEGORY,
-  GET_EXPERT_BY_ID,
+  GET_EXPERT,
   GET_EXPERTS,
   ADD_EXPERT,
   UPDATE_EXPERT,
