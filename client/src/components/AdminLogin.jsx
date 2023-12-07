@@ -17,7 +17,7 @@ const AdminLogin = () => {
   // Handle form submit
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("Attempting to login with:", username, password);
+    // console.log("Attempting to login with:", username, password); // Debugging
 
     try {
       // Execute the login mutation

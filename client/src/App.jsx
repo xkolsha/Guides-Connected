@@ -47,7 +47,7 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/experts" element={<OurExperts />} />
               <Route path="/categories" element={<Categories />} />
-              <Route path="/expert" element={<ExpertDetail />} />
+              <Route path="/experts/:id" element={<ExpertDetail />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route
                 path="/admin/dashboard"
