@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from "react"; // Import useState hook
 import {
   Box,
   Grid,
@@ -8,22 +8,28 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-import { useQuery } from "@apollo/client";
-import { GET_EXPERTS } from "../queries/adminQueries.jsx";
-import { Link } from "react-router-dom";
+import { useQuery } from "@apollo/client"; // Import useQuery hook
+import { GET_EXPERTS } from "../queries/adminQueries.jsx"; // Import query
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 
+// This component displays a list of experts
 const OurExperts = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { loading, error, data } = useQuery(GET_EXPERTS);
 
+  // Loading and error states
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error :(</p>;
+  if (error) {
+    console.error("GraphQL Error:", error);
+    return <p>Error: {error.message}</p>;
+  }
 
   // Filter experts based on the search term
   const filteredExperts = data.getExperts.filter((expert) =>
     expert.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Display experts
   return (
     <Box sx={{ p: 4 }}>
       <TextField
@@ -36,13 +42,12 @@ const OurExperts = () => {
       <Grid container spacing={3}>
         {filteredExperts.map((expert) => (
           <Grid item xs={12} sm={6} md={4} key={expert._id}>
-            {" "}
-            {/* Use expert._id or a unique identifier */}
             <Link
               to={`/experts/${expert._id}`}
               style={{ textDecoration: "none" }}
             >
               <Card>
+                {" "}
                 <CardMedia
                   component="img"
                   height="140"

@@ -102,6 +102,7 @@ export const GET_EXPERTS = gql`
       name
       title
       biography
+      image
     }
   }
 `;
@@ -113,6 +114,7 @@ export const GET_EXPERT_BY_ID = gql`
       name
       title
       biography
+      image
     }
   }
 `;
@@ -124,6 +126,7 @@ export const ADD_EXPERT = gql`
       name
       title
       biography
+      image
     }
   }
 `;
@@ -135,6 +138,7 @@ export const UPDATE_EXPERT = gql`
       name
       title
       biography
+      image
     }
   }
 `;
@@ -159,6 +163,7 @@ export default {
   ADD_CATEGORY,
   UPDATE_CATEGORY,
   DELETE_CATEGORY,
+  GET_EXPERT_BY_ID,
   GET_EXPERTS,
   ADD_EXPERT,
   UPDATE_EXPERT,
