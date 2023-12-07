@@ -115,9 +115,10 @@ const About = () => {
                 href="mailto:matthewasears@guidesconnected.com"
                 color="primary.light"
                 fontWeight={"bold"}
+                sx={{ wordBreak: "break-word" }}
               >
                 matthewasears@guidesconnected.com
-              </Link>
+              </Link>{" "}
             </Typography>
           </Grid>
         </Grid>
