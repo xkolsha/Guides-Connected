@@ -2,9 +2,13 @@ import "dotenv/config";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import path from "path";
+import { fileURLToPath } from "url";
 import cors from "cors";
 import db from "./config/db.js";
 import { typeDefs, resolvers } from "./schemas/index.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const server = new ApolloServer({
   typeDefs,
