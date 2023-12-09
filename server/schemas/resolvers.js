@@ -101,10 +101,10 @@ const resolvers = {
       }
 
       // Add the console log before the bcrypt comparison
-      console.log("Comparing passwords", {
-        providedPassword: password,
-        storedPassword: admin.password,
-      });
+      // console.log("Comparing passwords", {
+      //   providedPassword: password,
+      //   storedPassword: admin.password,
+      // });
 
       // Compare the passwords
       const valid = await bcrypt.compare(password, admin.password);

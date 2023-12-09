@@ -1,7 +1,7 @@
 import { Typography, Button, Box, Grid, Container } from "@mui/material";
 import HeroPhoto from "../assets/images/Hero.svg";
 import { useTheme } from "@mui/material/styles";
-import WaveBackground from "../assets/images/WaveBackground.svg";
+import WaveBackground from "../assets/images/WaveBackground.webp";
 
 const Hero = () => {
   const theme = useTheme();
