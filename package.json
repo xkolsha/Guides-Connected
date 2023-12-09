@@ -25,7 +25,7 @@
     "mongoose": "^8.0.1"
   },
   "engines": {
-    "node": "21.x",
+    "node": "20.x",
     "npm": "10.x"
   },
   "author": "Aviad Kohn",
