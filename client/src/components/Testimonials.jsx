@@ -84,6 +84,7 @@ const Testimonials = () => {
         What Our Customers Say.
       </Typography>
       <Swiper
+        style={{ paddingBottom: "1.33rem" }}
         spaceBetween={30}
         slidesPerView={1} // Default is 1 slide per view for small screens
         navigation={true}
@@ -109,8 +110,9 @@ const Testimonials = () => {
                 p: 4,
                 mx: "auto",
                 maxWidth: 345,
-                bgcolor: theme.palette.primary.contrastText,
-                color: theme.palette.primary.main,
+                bgcolor: theme.palette.secondary.main,
+                color: theme.palette.background.paper,
+                borderRadius: theme.shape.borderRadius,
               }}
             >
               <Avatar

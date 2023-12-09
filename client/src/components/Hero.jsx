@@ -9,7 +9,6 @@ const Hero = () => {
   return (
     <Box
       sx={{
-        py: 12,
         bgcolor: theme.palette.background.default,
         color: theme.palette.primary.main,
         position: "relative",
@@ -19,6 +18,7 @@ const Hero = () => {
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
         overflow: "hidden",
+        py: { xs: 4, sm: 8, md: 12 },
       }}
     >
       {/* Container to constrain the content width and center it */}

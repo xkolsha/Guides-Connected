@@ -17,6 +17,7 @@ import expertImg from "../assets/images/Experts.gif";
 import selectImg from "../assets/images/Select.gif";
 import pickImg from "../assets/images/Pick.gif";
 import collabImg from "../assets/images/Collaborate.gif";
+import miniWaveBackground from "../assets/images/miniWaveBackground.webp";
 
 // Steps for the stepper
 const steps = [
@@ -56,14 +57,16 @@ const About = () => {
   };
 
   return (
-    <Box>
+    <Box
+      sx={{
+        py: { xs: 8, sm: 10, md: 12 },
+      }}
+    >
       {/* Header Section */}
       <Box
         sx={{
           bgcolor: "background.paper",
           color: "primary.main",
-          py: 6,
-          mt: 6,
         }}
       >
         <Container maxWidth="lg">
@@ -78,7 +81,10 @@ const About = () => {
         </Container>
       </Box>
       {/* Our Story Section */}
-      <Container maxWidth="lg" sx={{ py: 6, bgcolor: "primary.main" }}>
+      <Container
+        maxWidth="lg"
+        sx={{ mt: { xs: 2, sm: 4, md: 6 }, py: 6, bgcolor: "primary.main" }}
+      >
         <Grid container spacing={4}>
           <Grid item xs={12} md={6}>
             <Box
@@ -86,7 +92,6 @@ const About = () => {
               sx={{
                 width: "100%",
                 height: "auto",
-                borderRadius: "8px",
               }}
               alt="Our Story"
               src={storyImg}
@@ -136,6 +141,7 @@ const About = () => {
                 textAlign: "center",
                 bgcolor: "primary.contrastText",
                 color: "primary.main",
+                borderRadius: "24px",
               }}
             >
               {/* Add Image or Icon here */}
@@ -160,6 +166,7 @@ const About = () => {
                 textAlign: "center",
                 bgcolor: "primary.contrastText",
                 color: "primary.main",
+                borderRadius: "24px",
               }}
             >
               {/* Add Image or Icon here */}
@@ -185,6 +192,7 @@ const About = () => {
                 textAlign: "center",
                 bgcolor: "primary.contrastText",
                 color: "primary.main",
+                borderRadius: "24px",
               }}
             >
               {/* Add Image or Icon here */}
@@ -281,7 +289,19 @@ const About = () => {
         )}
       </Container>
       {/* Meet Our Experts Section */}
-      <Container maxWidth="lg" sx={{ py: 6, textAlign: "center" }}>
+      <Container
+        maxWidth="lg"
+        sx={{
+          py: 6,
+          textAlign: "center",
+          backgroundImage: `url(${miniWaveBackground})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          overflow: "hidden",
+        }}
+      >
         <Typography variant="h3" gutterBottom fontWeight={"bold"}>
           Our Experts{" "}
         </Typography>
