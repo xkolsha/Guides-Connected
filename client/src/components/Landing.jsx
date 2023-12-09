@@ -42,7 +42,14 @@ const Landing = () => {
             </Grid>
             <Grid item xs={12} md={6}>
               {/* Placeholder for image */}
-              <Paper elevation={3} sx={{ height: 360, width: "100%" }} />
+              <Paper
+                elevation={3}
+                sx={{
+                  height: 360,
+                  width: "100%",
+                  borderRadius: theme.shape.borderRadius,
+                }}
+              />
             </Grid>
           </Grid>
         </Container>
@@ -82,7 +89,14 @@ const Landing = () => {
           <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={6} sx={{ order: { xs: 2, md: 1 } }}>
               {/* Placeholder for image */}
-              <Paper elevation={3} sx={{ height: 360, width: "100%" }} />
+              <Paper
+                elevation={3}
+                sx={{
+                  height: 360,
+                  width: "100%",
+                  borderRadius: theme.shape.borderRadius,
+                }}
+              />
             </Grid>
             <Grid item xs={12} md={6} sx={{ order: { xs: 1, md: 2 } }}>
               {/* Classroom enrichment content */}
@@ -121,7 +135,14 @@ const Landing = () => {
             </Grid>
             <Grid item xs={12} md={6}>
               {/* Another placeholder for image */}
-              <Paper elevation={3} sx={{ height: 360, width: "100%" }} />
+              <Paper
+                elevation={3}
+                sx={{
+                  height: 360,
+                  width: "100%",
+                  borderRadius: theme.shape.borderRadius,
+                }}
+              />
             </Grid>
           </Grid>
         </Container>
