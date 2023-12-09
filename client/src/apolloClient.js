@@ -1,9 +1,9 @@
 import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 
-// Create the client as outlined in the Apollo docs
+// Create the apollo client
 const client = new ApolloClient({
   link: new HttpLink({
-    uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
+    uri: import.meta.env.VITE_GRAPHQL_ENDPOINT,
   }),
   cache: new InMemoryCache(),
 });
