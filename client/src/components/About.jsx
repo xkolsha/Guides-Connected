@@ -17,6 +17,7 @@ import expertImg from "../assets/images/Experts.gif";
 import selectImg from "../assets/images/Select.gif";
 import pickImg from "../assets/images/Pick.gif";
 import collabImg from "../assets/images/Collaborate.gif";
+import miniWaveBackground from "../assets/images/miniWaveBackground.webp";
 
 // Steps for the stepper
 const steps = [
@@ -288,7 +289,19 @@ const About = () => {
         )}
       </Container>
       {/* Meet Our Experts Section */}
-      <Container maxWidth="lg" sx={{ py: 6, textAlign: "center" }}>
+      <Container
+        maxWidth="lg"
+        sx={{
+          py: 6,
+          textAlign: "center",
+          backgroundImage: `url(${miniWaveBackground})`,
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          overflow: "hidden",
+        }}
+      >
         <Typography variant="h3" gutterBottom fontWeight={"bold"}>
           Our Experts{" "}
         </Typography>
