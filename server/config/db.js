@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+// Connect to MongoDB
 const dbUri =
   process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/guidesConnectedDb";
 console.log("Connecting to MongoDB at:", dbUri);

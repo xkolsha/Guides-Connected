@@ -106,6 +106,7 @@ const resolvers = {
         storedPassword: admin.password,
       });
 
+      // Compare the passwords
       const valid = await bcrypt.compare(password, admin.password);
 
       // Add the console log after the bcrypt comparison
@@ -115,6 +116,7 @@ const resolvers = {
         throw new AuthenticationError("Invalid credentials");
       }
 
+      // Generate the JWT token
       const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
@@ -126,4 +128,5 @@ const resolvers = {
   // Define resolvers for other types if necessary
 };
 
+// Export the resolvers
 export default resolvers;
