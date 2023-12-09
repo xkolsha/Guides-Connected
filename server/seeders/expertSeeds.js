@@ -1,3 +1,4 @@
+// Purpose: to seed the database with expert data
 const expertSeeds = [
   {
     name: "Dr. Jane Smith",

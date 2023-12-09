@@ -1,3 +1,4 @@
+// Purpose: seed data for categories table
 const categorySeeds = [
   {
     name: "Science",

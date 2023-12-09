@@ -2,8 +2,10 @@ import { Schema, model } from "mongoose";
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
+// Destructuring bcrypt
 const { hash, compare } = bcrypt;
 
+// Creating Admin schema
 const adminSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -32,4 +34,5 @@ adminSchema.methods.isCorrectPassword = async function (password) {
 // Creating Admin model
 const Admin = model("Admin", adminSchema);
 
+// Exporting Admin model
 export default Admin;

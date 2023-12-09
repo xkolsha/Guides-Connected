@@ -1,5 +1,6 @@
 import { gql } from "apollo-server-express";
 
+// Define the GraphQL schema using the GraphQL schema language
 const typeDefs = gql`
   type Admin {
     _id: ID

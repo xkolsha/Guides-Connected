@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
+// Creating Category schema
 const categorySchema = new Schema({
   name: {
     type: String,
@@ -21,6 +22,8 @@ const categorySchema = new Schema({
   // Add other fields as necessary
 });
 
+// Creating Category model
 const Category = model("Category", categorySchema);
 
+// Exporting Category model
 export default Category;

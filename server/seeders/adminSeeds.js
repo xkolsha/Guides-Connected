@@ -1,3 +1,4 @@
+// Purpose: To seed the admin table with a default admin account
 const adminSeeds = [
   {
     username: "admin",

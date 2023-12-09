@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 
+// Creating Expert schema
 const expertSchema = new Schema({
   name: {
     type: String,
@@ -23,6 +24,8 @@ const expertSchema = new Schema({
   },
 });
 
+// Creating Expert model
 const Expert = model("Expert", expertSchema);
 
+// Exporting Expert model
 export default Expert;
