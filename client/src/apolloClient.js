@@ -1,9 +1,9 @@
 import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 
-// purpose of this file is to create a new ApolloClient instance and export it so that we can use it in our app
+// Create the client as outlined in the Apollo docs
 const client = new ApolloClient({
   link: new HttpLink({
-    uri: "http://localhost:4000/graphql", // this is the endpoint that we are making requests to
+    uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
   }),
   cache: new InMemoryCache(),
 });
