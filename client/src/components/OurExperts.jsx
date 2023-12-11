@@ -56,6 +56,17 @@ const OurExperts = () => {
         mb={4}
       >
         Our Experts
+        <span style={{ color: "#FF5733" }}>.</span>{" "}
+      </Typography>
+      <Typography
+        variant="h6"
+        color="primary.main"
+        gutterBottom
+        align="center"
+        mb={4}
+      >
+        Our experts are top scholars and teachers in their fields, covering all
+        subjects taught in schools.
       </Typography>
       <Box sx={{ mb: 4, maxWidth: "500px", mx: "auto" }}>
         <TextField

@@ -22,7 +22,7 @@ const resolvers = {
       return await Expert.find({});
     },
     getCategories: async () => {
-      return await Category.find({});
+      return await Category.find({}).populate("experts");
     },
     getCategory: async (_, { id }) => {
       return await Category.findById(id);

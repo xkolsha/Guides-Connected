@@ -67,7 +67,7 @@ const Landing = () => {
             <Grid item xs={12}>
               {/* Call to action text and buttons */}
               <Typography variant="h4" gutterBottom>
-                Ready to get started?
+                Ready to get started
               </Typography>
               <Button variant="contained" sx={{ marginRight: 2 }}>
                 Contact Us

@@ -81,7 +81,8 @@ const Testimonials = () => {
         fontWeight={"bold"}
         mb={6}
       >
-        What Our Customers Say.
+        What Our Customers Say
+        <span style={{ color: "#FF5733" }}>.</span>{" "}
       </Typography>
       <Swiper
         style={{ paddingBottom: "1.33rem" }}

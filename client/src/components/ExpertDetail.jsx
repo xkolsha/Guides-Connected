@@ -21,7 +21,7 @@ const ExpertDetail = () => {
 
   // Safely access the fields in expertData
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg ">
       <Box sx={{ my: 4 }}>
         <Typography variant="h3" gutterBottom>
           {expertData?.name}
