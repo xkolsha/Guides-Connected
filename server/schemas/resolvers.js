@@ -15,9 +15,18 @@ const resolvers = {
     getExperts: async () => {
       return await Expert.find({}).populate("categories");
     },
+
     getExpert: async (_, { id }) => {
-      return await Expert.findById(id);
+      try {
+        const expert = await Expert.findById(id).populate("categories");
+        console.log("Populated Expert:", expert); // This should show the categories if they're populated correctly
+        return expert;
+      } catch (error) {
+        console.error("Error in getExpert resolver:", error);
+        throw new Error("Error fetching expert data");
+      }
     },
+
     allExperts: async () => {
       return await Expert.find({});
     },
@@ -48,9 +57,9 @@ const resolvers = {
       await newExpert.save();
 
       // Associate categories with the expert
-      if (expertData.categoryIds) {
+      if (expertData.categories) {
         await Category.updateMany(
-          { _id: { $in: expertData.categoryIds } },
+          { _id: { $in: expertData.categories } },
           { $push: { experts: newExpert._id } }
         );
       }
@@ -64,17 +73,17 @@ const resolvers = {
       });
 
       // Handle updating expert's categories
-      // Assuming expertData.categoryIds contains the new set of category IDs
-      if (expertData.categoryIds) {
+      // Assuming expertData.categories contains the new set of category IDs
+      if (expertData.categories) {
         // Remove expert from categories not in the new list
         await Category.updateMany(
-          { experts: id, _id: { $nin: expertData.categoryIds } },
+          { experts: id, _id: { $nin: expertData.categories } },
           { $pull: { experts: id } }
         );
 
         // Add expert to new categories
         await Category.updateMany(
-          { _id: { $in: expertData.categoryIds } },
+          { _id: { $in: expertData.categories } },
           { $addToSet: { experts: id } } // Use $addToSet to avoid duplicates
         );
       }

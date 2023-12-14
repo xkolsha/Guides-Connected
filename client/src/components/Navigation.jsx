@@ -44,7 +44,6 @@ const Navigation = () => {
     { label: "Home", path: "/" },
     { label: "About", path: "/about" },
     { label: "Our Experts", path: "/experts" },
-    { label: "Categories", path: "/categories" },
   ];
 
   return (

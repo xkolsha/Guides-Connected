@@ -12,16 +12,17 @@ const expertSchema = new Schema({
   biography: {
     type: String,
   },
+
+  image: {
+    type: String, // URL of the uploaded image
+    required: false,
+  },
   categories: [
     {
       type: Schema.Types.ObjectId,
       ref: "Category",
     },
   ],
-  image: {
-    type: String, // URL of the uploaded image
-    required: false,
-  },
 });
 
 // Creating Expert model

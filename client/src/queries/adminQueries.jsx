@@ -62,6 +62,11 @@ export const GET_CATEGORY = gql`
       _id
       name
       description
+      experts {
+        _id
+        name
+        description
+      }
     }
   }
 `;
@@ -103,6 +108,10 @@ export const GET_EXPERTS = gql`
       title
       biography
       image
+      categories {
+        _id
+        name
+      }
     }
   }
 `;

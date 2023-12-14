@@ -1,9 +1,9 @@
 import {
+  Container,
   Box,
   Typography,
-  Button,
   Paper,
-  Container,
+  Button,
   CircularProgress,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
@@ -17,44 +17,58 @@ const ExpertDetail = () => {
   if (loading) return <CircularProgress />;
   if (error) return <p>Error: {error.message}</p>;
 
+  console.log("Expert data:", data?.getExpert);
+
   const expertData = data?.getExpert;
 
-  // Safely access the fields in expertData
   return (
-    <Container maxWidth="lg ">
-      <Box sx={{ my: 4 }}>
-        <Typography variant="h3" gutterBottom>
+    <Container maxWidth="lg">
+      <Box sx={{ py: { xs: 8, sm: 10, md: 12 } }}>
+        {/* Expert Name */}
+        <Typography
+          variant="h2"
+          fontWeight={"bold"}
+          color={"primary"}
+          gutterBottom
+        >
           {expertData?.name}
+          <span style={{ color: "#FF5733" }}>.</span>
         </Typography>
-        <Typography variant="h5" gutterBottom>
+
+        {/* Image Section */}
+        <Box sx={{ my: 2 }}>
+          <img
+            src={expertData?.image || "path_to_default_image.jpg"}
+            alt={expertData?.name}
+            style={{ maxWidth: "100%", height: "auto" }}
+          />
+        </Box>
+
+        {/* Expert Title */}
+        <Typography variant="h4" color={"primary"} gutterBottom>
           {expertData?.title}
         </Typography>
-        <Typography variant="body1" paragraph>
+
+        {/* Expert Biography */}
+        <Typography variant="body1" color={"primary"} paragraph>
           {expertData?.biography}
         </Typography>
-        <Typography variant="body1" paragraph>
-          <strong>Areas of Expertise:</strong> {expertData?.expertise}
-        </Typography>
 
-        <Box sx={{ my: 2 }}>
-          <Typography variant="h6">Publications</Typography>
-          {expertData?.publications?.map((publication, index) => (
-            <Paper key={index} sx={{ p: 2, my: 1 }}>
-              <Typography variant="body1">{publication.title}</Typography>
-              <Button href={publication.link} target="_blank">
-                Read More
-              </Button>
-            </Paper>
-          ))}
-        </Box>
+        {/* Categories Section */}
+        {expertData?.categories && expertData.categories.length > 0 && (
+          <Box sx={{ my: 2 }}>
+            <Typography variant="h6" color={"primary"}>
+              Categories
+            </Typography>
+            {expertData.categories.map((category, index) => (
+              <Paper key={index} sx={{ p: 2, my: 1 }}>
+                <Typography variant="body1">{category.name}</Typography>
+              </Paper>
+            ))}
+          </Box>
+        )}
 
-        <Box sx={{ my: 2 }}>
-          <Typography variant="h6">Contact</Typography>
-          <Typography variant="body1">
-            Email: {expertData?.contactEmail}
-          </Typography>
-        </Box>
-
+        {/* Introduction Video */}
         {expertData?.videoUrl && (
           <Box sx={{ my: 2 }}>
             <Typography variant="h6">Introduction Video</Typography>
@@ -65,6 +79,7 @@ const ExpertDetail = () => {
           </Box>
         )}
 
+        {/* Consultation Button */}
         <Button variant="contained" sx={{ mt: 2 }}>
           Schedule a Consultation
         </Button>

@@ -42,7 +42,7 @@ const typeDefs = gql`
     name: String!
     title: String!
     biography: String
-    categoryIds: [ID]
+    categories: [ID]
     image: String
   }
 
