@@ -16,6 +16,7 @@ import { useQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { GET_EXPERTS, GET_CATEGORIES } from "../queries/adminQueries.jsx";
 
+// purpose: display all experts
 const OurExperts = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState(null);
@@ -32,11 +33,13 @@ const OurExperts = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
+  // Log data to console
   useEffect(() => {
     console.log("Experts:", dataExperts?.getExperts);
     console.log("Categories:", dataCategories?.getCategories);
   }, [dataExperts, dataCategories]);
 
+  // Loading and error handling
   if (loadingExperts || loadingCategories) {
     return (
       <Typography variant="h6" align="center">
@@ -44,7 +47,7 @@ const OurExperts = () => {
       </Typography>
     );
   }
-
+  // if there is an error loading the data, display an error message
   if (errorExperts || errorCategories) {
     console.error("Error loading data:", errorExperts || errorCategories);
     return (
@@ -54,6 +57,7 @@ const OurExperts = () => {
     );
   }
 
+  // Filter experts based on search term and active category
   const filterExperts = (expert) => {
     const searchLower = searchTerm.toLowerCase();
     const matchesSearch =
@@ -63,18 +67,24 @@ const OurExperts = () => {
 
     let matchesCategory = true;
     if (activeCategory) {
-      matchesCategory = expert.categoryIds?.includes(activeCategory);
+      matchesCategory = expert.categories.some(
+        (category) => category._id === activeCategory
+      );
     }
 
     return matchesSearch && matchesCategory;
   };
+
+  // Filter experts based on search term and active category
   const filteredExperts = dataExperts.getExperts.filter(filterExperts);
 
+  // Handle category button click
   const handleCategoryClick = (categoryId) => {
     console.log("Clicked Category:", categoryId);
     setActiveCategory(categoryId === activeCategory ? null : categoryId);
     console.log("Active Category:", activeCategory);
   };
+
   return (
     <Box sx={{ py: { xs: 8, sm: 10, md: 12 }, px: isSmallScreen ? 2 : 8 }}>
       <Typography
