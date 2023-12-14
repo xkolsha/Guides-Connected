@@ -77,6 +77,7 @@ const About = () => {
             fontWeight={"bold"}
           >
             About Us
+            <span style={{ color: "#FF5733" }}>.</span>{" "}
           </Typography>
         </Container>
       </Box>

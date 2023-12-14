@@ -10,7 +10,6 @@ import Footer from "./components/Footer";
 import Testimonials from "./components/Testimonials";
 import About from "./components/About";
 import OurExperts from "./components/OurExperts";
-import Categories from "./components/Categories";
 import ExpertDetail from "./components/ExpertDetail";
 import AdminLogin from "./components/AdminLogin";
 import AdminDashboard from "./components/AdminDashboard";
@@ -46,7 +45,6 @@ function App() {
               {/* About Route */}
               <Route path="/about" element={<About />} />
               <Route path="/experts" element={<OurExperts />} />
-              <Route path="/categories" element={<Categories />} />
               <Route path="/experts/:id" element={<ExpertDetail />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route
