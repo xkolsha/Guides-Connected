@@ -1,9 +1,10 @@
 import cloudinary from "cloudinary";
 
+// Configure Cloudinary with environment variables
 cloudinary.config({
-  cloud_name: "YOUR_CLOUD_NAME",
-  api_key: "YOUR_API_KEY",
-  api_secret: "YOUR_API_SECRET",
+  cloud_name: import.meta.env.VITE_CLOUDINARY_CLOUD_NAME,
+  api_key: import.meta.env.VITE_CLOUDINARY_API_KEY,
+  api_secret: import.meta.env.VITE_CLOUDINARY_API_SECRET,
   secure: true,
 });
 

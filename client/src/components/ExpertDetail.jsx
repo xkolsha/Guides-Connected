@@ -17,20 +17,13 @@ const ExpertDetail = () => {
   if (loading) return <CircularProgress />;
   if (error) return <p>Error: {error.message}</p>;
 
-  console.log("Expert data:", data?.getExpert);
-
   const expertData = data?.getExpert;
 
   return (
     <Container maxWidth="lg">
       <Box sx={{ py: { xs: 8, sm: 10, md: 12 } }}>
         {/* Expert Name */}
-        <Typography
-          variant="h2"
-          fontWeight={"bold"}
-          color={"primary"}
-          gutterBottom
-        >
+        <Typography variant="h2" fontWeight="bold" color="primary" gutterBottom>
           {expertData?.name}
           <span style={{ color: "#FF5733" }}>.</span>
         </Typography>
@@ -38,7 +31,7 @@ const ExpertDetail = () => {
         {/* Image Section */}
         <Box sx={{ my: 2 }}>
           <img
-            src={expertData?.image || "path_to_default_image.jpg"}
+            src={expertData?.image || "../assets/images/defaultProfileIMG.jpg"} // Use the URL from MongoDB
             alt={expertData?.name}
             style={{ maxWidth: "100%", height: "auto" }}
           />
