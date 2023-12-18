@@ -17,12 +17,17 @@ import {
   Paper,
   Typography,
   Box,
-  TextareaAutosize,
   Tabs,
   Tab,
+  Container,
+  TextareaAutosize,
+  useTheme, // Import useTheme
 } from "@mui/material";
 
 const AdminDashboard = () => {
+  // Use the theme here
+  const theme = useTheme();
+
   // State for handling form data and UI
   const [selectedItem, setSelectedItem] = useState(null);
   const [formMode, setFormMode] = useState("add"); // 'add' or 'edit'
@@ -33,8 +38,6 @@ const AdminDashboard = () => {
     biography: "",
   });
   const [currentEditingType, setCurrentEditingType] = useState("expert"); // 'expert' or 'category'
-
-  // State for managing the active tab in sub-navigation
   const [activeTab, setActiveTab] = useState(0);
 
   // Handler for tab change in sub-navigation
@@ -134,167 +137,183 @@ const AdminDashboard = () => {
 
   // Main component render
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        my: 4,
-        py: 12,
-        maxHeight: "100svh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Typography variant="h4" gutterBottom sx={{ mb: 6, fontWeight: "bold" }}>
-        Admin Dashboard
-      </Typography>
+    <Container maxWidth="lg">
+      <Box
+        sx={{
+          py: { xs: 8, sm: 10, md: 12 },
+        }}
+      >
+        <Typography
+          variant="h2"
+          gutterBottom
+          align="center"
+          fontWeight={"bold"}
+        >
+          Admin Dashboard
+          <span style={{ color: "#FF5733" }}>.</span>{" "}
+        </Typography>
 
-      {/* Sub-navigation Tabs */}
-      <Tabs value={activeTab} onChange={handleTabChange} centered sx={{ p: 4 }}>
-        <Tab label="Manage Experts" />
-        <Tab label="Manage Categories" />
-      </Tabs>
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          centered
+          sx={{ mb: 3 }}
+        >
+          <Tab label="Manage Experts" />
+          <Tab label="Manage Categories" />
+        </Tabs>
 
-      {/* Conditional Rendering of Experts and Categories Management Sections */}
-      {activeTab === 0 && (
-        <Grid item xs={12} md={6} mb={3}>
-          <Paper sx={{ p: 6 }}>
-            {expertsData?.getExperts.map((expert) => (
-              <Box key={expert._id} sx={{ mb: 3 }}>
-                <Typography variant="body1" mb={1}>
-                  {expert.name} - {expert.title}
-                </Typography>
+        <Grid container spacing={3} justifyContent="center">
+          {/* Experts Management Section */}
+          {activeTab === 0 && (
+            <Grid item xs={12} md={6}>
+              <Paper sx={{ p: 4, borderRadius: theme.shape.borderRadius }}>
+                {/* Experts List Rendering */}
+                {expertsData?.getExperts.map((expert) => (
+                  <Box key={expert._id} sx={{ mb: 3 }}>
+                    <Typography variant="body1" mb={1}>
+                      {expert.name} - {expert.title}
+                    </Typography>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ mr: 1 }}
+                      onClick={() => handleEditClick(expert, "expert")}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() => handleDeleteClick(expert._id, "expert")}
+                    >
+                      Delete
+                    </Button>
+                  </Box>
+                ))}
                 <Button
                   variant="contained"
-                  color="primary"
-                  sx={{ mr: 1 }}
-                  onClick={() => handleEditClick(expert, "expert")}
+                  color="secondary"
+                  onClick={() => handleAddNewClick("expert")}
+                  sx={{ mt: 1 }}
                 >
-                  Edit
+                  Add Expert
                 </Button>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  onClick={() => handleDeleteClick(expert._id, "expert")}
-                >
-                  Delete
-                </Button>
-              </Box>
-            ))}
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => handleAddNewClick("expert")}
-              sx={{ mt: 1 }}
-            >
-              Add Expert
-            </Button>
-          </Paper>
-        </Grid>
-      )}
-      {activeTab === 1 && (
-        <Grid item xs={12} md={6} mb={3}>
-          <Paper sx={{ p: 6 }}>
-            {categoriesData?.getCategories.map((category) => (
-              <Box key={category._id} sx={{ mb: 3 }}>
-                <Typography variant="body1" mb={1}>
-                  {category.name}
-                </Typography>
+              </Paper>
+            </Grid>
+          )}
+
+          {/* Categories Management Section */}
+          {activeTab === 1 && (
+            <Grid item xs={12} md={6}>
+              <Paper sx={{ p: 4, borderRadius: theme.shape.borderRadius }}>
+                {/* Categories List Rendering */}
+                {categoriesData?.getCategories.map((category) => (
+                  <Box key={category._id} sx={{ mb: 3 }}>
+                    <Typography variant="body1" mb={1}>
+                      {category.name}
+                    </Typography>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ mr: 1 }}
+                      onClick={() => handleEditClick(category, "category")}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() =>
+                        handleDeleteClick(category._id, "category")
+                      }
+                    >
+                      Delete
+                    </Button>
+                  </Box>
+                ))}
                 <Button
                   variant="contained"
-                  color="primary"
-                  sx={{ mr: 1 }}
-                  onClick={() => handleEditClick(category, "category")}
+                  color="secondary"
+                  onClick={() => handleAddNewClick("category")}
                 >
-                  Edit
+                  Add Category
                 </Button>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  onClick={() => handleDeleteClick(category._id, "category")}
-                >
-                  Delete
-                </Button>
-              </Box>
-            ))}
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => handleAddNewClick("category")}
-            >
-              Add Category
-            </Button>
-          </Paper>
-        </Grid>
-      )}
+              </Paper>
+            </Grid>
+          )}
 
-      {/* Form for Adding/Editing Experts or Categories */}
-      <Grid item xs={12}>
-        <Paper sx={{ p: 3 }}>
-          <Typography variant="h6">
-            {formMode === "add"
-              ? `Add New ${currentEditingType}`
-              : `Edit ${currentEditingType}`}
-          </Typography>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              label="Name"
-              variant="outlined"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              required
-              fullWidth
-              margin="normal"
-            />
-            {currentEditingType === "expert" && (
-              <>
+          {/* Form for Adding/Editing Experts or Categories */}
+          <Grid item xs={12}>
+            <Paper sx={{ p: 4, borderRadius: theme.shape.borderRadius }}>
+              <Typography variant="h6">
+                {formMode === "add"
+                  ? `Add New ${currentEditingType}`
+                  : `Edit ${currentEditingType}`}
+              </Typography>
+              {/* Form elements here */}
+              <form onSubmit={handleSubmit}>
                 <TextField
-                  label="Title"
+                  label="Name"
                   variant="outlined"
-                  value={formData.title}
+                  value={formData.name}
                   onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
+                    setFormData({ ...formData, name: e.target.value })
                   }
+                  required
                   fullWidth
                   margin="normal"
                 />
-                <TextareaAutosize
-                  minRows={3}
-                  placeholder="Biography"
-                  value={formData.biography}
-                  onChange={(e) =>
-                    setFormData({ ...formData, biography: e.target.value })
-                  }
-                  style={{ width: "100%", marginTop: "8px" }}
-                />
-              </>
-            )}
-            {currentEditingType === "category" && (
-              <TextareaAutosize
-                minRows={3}
-                placeholder="Description"
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-                style={{ width: "100%", marginTop: "8px" }}
-              />
-            )}
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              sx={{ mt: 2 }}
-            >
-              {formMode === "add" ? "Add" : "Update"} {currentEditingType}
-            </Button>
-          </form>
-        </Paper>
-      </Grid>
-    </Box>
+                {/* Additional form fields based on the currentEditingType */}
+                {currentEditingType === "expert" && (
+                  <>
+                    <TextField
+                      label="Title"
+                      variant="outlined"
+                      value={formData.title}
+                      onChange={(e) =>
+                        setFormData({ ...formData, title: e.target.value })
+                      }
+                      fullWidth
+                      margin="normal"
+                    />
+                    <TextareaAutosize
+                      minRows={3}
+                      placeholder="Biography"
+                      value={formData.biography}
+                      onChange={(e) =>
+                        setFormData({ ...formData, biography: e.target.value })
+                      }
+                      style={{ width: "100%", marginTop: "8px" }}
+                    />
+                  </>
+                )}
+                {currentEditingType === "category" && (
+                  <TextareaAutosize
+                    minRows={3}
+                    placeholder="Description"
+                    value={formData.description}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
+                    style={{ width: "100%", marginTop: "8px" }}
+                  />
+                )}
+
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  sx={{ mt: 2 }}
+                >
+                  {formMode === "add" ? "Add" : "Update"} {currentEditingType}
+                </Button>
+              </form>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Box>
+    </Container>
   );
 };
 

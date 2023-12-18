@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 
-const password = "admin071023";
+const password = "admin071023"; // Replace with My password
 const saltRounds = 10; // Same as in your seeding script
 
 bcrypt.hash(password, saltRounds, function (err, hash) {
