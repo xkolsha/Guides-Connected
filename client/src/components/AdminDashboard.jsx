@@ -1,5 +1,7 @@
 import { useState } from "react";
+//  Apollo Client Hooks
 import { useQuery, useMutation } from "@apollo/client";
+// GraphQL Queries and Mutations
 import {
   GET_EXPERTS,
   GET_CATEGORIES,
@@ -10,6 +12,8 @@ import {
   UPDATE_CATEGORY,
   DELETE_CATEGORY,
 } from "../queries/adminQueries.jsx";
+
+// Material UI Components
 import {
   Button,
   TextField,
@@ -21,11 +25,15 @@ import {
   Tab,
   Container,
   TextareaAutosize,
-  useTheme, // Import useTheme
+  useTheme,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 
 const AdminDashboard = () => {
-  // Use the theme here
+  // Use the theme
   const theme = useTheme();
 
   // State for handling form data and UI
@@ -36,6 +44,7 @@ const AdminDashboard = () => {
     title: "",
     description: "",
     biography: "",
+    categories: [],
   });
   const [currentEditingType, setCurrentEditingType] = useState("expert"); // 'expert' or 'category'
   const [activeTab, setActiveTab] = useState(0);
@@ -47,8 +56,12 @@ const AdminDashboard = () => {
 
   // Apollo Client hooks for fetching and manipulating data
   const { data: expertsData, refetch: refetchExperts } = useQuery(GET_EXPERTS);
-  const { data: categoriesData, refetch: refetchCategories } =
-    useQuery(GET_CATEGORIES);
+  const {
+    data: categoriesData,
+    loading: loadingCategories,
+    error: errorCategories,
+    refetch: refetchCategories,
+  } = useQuery(GET_CATEGORIES);
 
   // Mutation hooks for CRUD operations on experts and categories
   const [addExpert] = useMutation(ADD_EXPERT, {
@@ -70,6 +83,16 @@ const AdminDashboard = () => {
     onCompleted: () => refetchCategories(),
   });
 
+  // Check for loading or error state of categoriesData
+  if (loadingCategories) {
+    return <p>Loading categories...</p>;
+  }
+
+  // Check for error state of categoriesData
+  if (errorCategories) {
+    return <p>Error loading categories: {errorCategories.message}</p>;
+  }
+
   // Handler functions for CRUD operations
   const handleEditClick = (item, type) => {
     setSelectedItem(item);
@@ -80,9 +103,11 @@ const AdminDashboard = () => {
       title: item.title || "",
       description: item.description || "",
       biography: item.biography || "",
+      categories: type === "expert" ? item.categories.map((c) => c._id) : [],
     });
   };
 
+  // Handler for deleting an expert or category
   const handleDeleteClick = async (id, type) => {
     if (type === "expert") {
       await deleteExpert({ variables: { id } });
@@ -91,13 +116,21 @@ const AdminDashboard = () => {
     }
   };
 
+  // Handler for adding new expert or category
   const handleAddNewClick = (type) => {
     setSelectedItem(null);
     setFormMode("add");
     setCurrentEditingType(type);
-    setFormData({ name: "", title: "", description: "", biography: "" });
+    setFormData({
+      name: "",
+      title: "",
+      description: "",
+      biography: "",
+      categories: [],
+    });
   };
 
+  // Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -106,6 +139,7 @@ const AdminDashboard = () => {
           name: formData.name,
           title: formData.title,
           biography: formData.biography,
+          categories: formData.categories,
         };
         if (formMode === "add") {
           await addExpert({ variables: { expertData } });
@@ -127,8 +161,16 @@ const AdminDashboard = () => {
           });
         }
       }
+
+      // Reset form data and UI state
       setSelectedItem(null);
-      setFormData({ name: "", title: "", description: "", biography: "" });
+      setFormData({
+        name: "",
+        title: "",
+        description: "",
+        biography: "",
+        categories: [],
+      });
       setFormMode("add");
     } catch (error) {
       console.error("Error handling form submission:", error);
@@ -138,11 +180,7 @@ const AdminDashboard = () => {
   // Main component render
   return (
     <Container maxWidth="lg">
-      <Box
-        sx={{
-          py: { xs: 8, sm: 10, md: 12 },
-        }}
-      >
+      <Box sx={{ py: { xs: 8, sm: 10, md: 12 } }}>
         <Typography
           variant="h2"
           gutterBottom
@@ -150,7 +188,7 @@ const AdminDashboard = () => {
           fontWeight={"bold"}
         >
           Admin Dashboard
-          <span style={{ color: "#FF5733" }}>.</span>{" "}
+          <span style={{ color: "#FF5733" }}>.</span>
         </Typography>
 
         <Tabs
@@ -236,6 +274,7 @@ const AdminDashboard = () => {
                   variant="contained"
                   color="secondary"
                   onClick={() => handleAddNewClick("category")}
+                  sx={{ mt: 1 }}
                 >
                   Add Category
                 </Button>
@@ -264,7 +303,8 @@ const AdminDashboard = () => {
                   fullWidth
                   margin="normal"
                 />
-                {/* Additional form fields based on the currentEditingType */}
+
+                {/* Conditional Form Fields based on Current Editing Type */}
                 {currentEditingType === "expert" && (
                   <>
                     <TextField
@@ -286,6 +326,36 @@ const AdminDashboard = () => {
                       }
                       style={{ width: "100%", marginTop: "8px" }}
                     />
+                    {/* Category Selection for Experts */}
+                    <FormControl fullWidth margin="normal">
+                      <InputLabel>Categories</InputLabel>
+                      <Select
+                        multiple
+                        value={formData.categories}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            categories: e.target.value,
+                          })
+                        }
+                        renderValue={(selected) =>
+                          selected
+                            .map(
+                              (id) =>
+                                categoriesData.getCategories.find(
+                                  (cat) => cat._id === id
+                                )?.name || id
+                            )
+                            .join(", ")
+                        }
+                      >
+                        {categoriesData.getCategories.map((category) => (
+                          <MenuItem key={category._id} value={category._id}>
+                            {category.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </>
                 )}
                 {currentEditingType === "category" && (
