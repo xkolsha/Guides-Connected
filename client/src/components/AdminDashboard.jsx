@@ -30,6 +30,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Chip,
+  Tooltip,
 } from "@mui/material";
 
 const AdminDashboard = () => {
@@ -328,7 +330,9 @@ const AdminDashboard = () => {
                     />
                     {/* Category Selection for Experts */}
                     <FormControl fullWidth margin="normal">
-                      <InputLabel>Categories</InputLabel>
+                      {formData.categories.length === 0 && (
+                        <InputLabel>Categories</InputLabel>
+                      )}
                       <Select
                         multiple
                         value={formData.categories}
@@ -338,16 +342,33 @@ const AdminDashboard = () => {
                             categories: e.target.value,
                           })
                         }
-                        renderValue={(selected) =>
-                          selected
-                            .map(
-                              (id) =>
+                        renderValue={(selected) => (
+                          <Box
+                            sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+                          >
+                            {selected.map((id) => {
+                              const category =
                                 categoriesData.getCategories.find(
                                   (cat) => cat._id === id
-                                )?.name || id
-                            )
-                            .join(", ")
-                        }
+                                );
+                              return (
+                                <Tooltip key={id} title={category?.name || id}>
+                                  <Chip
+                                    label={category?.name || id}
+                                    style={{ maxWidth: 150 }}
+                                  />
+                                </Tooltip>
+                              );
+                            })}
+                          </Box>
+                        )}
+                        MenuProps={{
+                          PaperProps: {
+                            style: {
+                              maxHeight: 224,
+                            },
+                          },
+                        }}
                       >
                         {categoriesData.getCategories.map((category) => (
                           <MenuItem key={category._id} value={category._id}>
@@ -355,7 +376,7 @@ const AdminDashboard = () => {
                           </MenuItem>
                         ))}
                       </Select>
-                    </FormControl>
+                    </FormControl>{" "}
                   </>
                 )}
                 {currentEditingType === "category" && (
