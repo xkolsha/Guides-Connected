@@ -1,6 +1,8 @@
 import { useState } from "react";
+
 //  Apollo Client Hooks
 import { useQuery, useMutation } from "@apollo/client";
+
 // GraphQL Queries and Mutations
 import {
   GET_EXPERTS,
@@ -37,10 +39,11 @@ import {
 const AdminDashboard = () => {
   // Use the theme
   const theme = useTheme();
-
-  // State for handling form data and UI
+  // State for form data
   const [selectedItem, setSelectedItem] = useState(null);
-  const [formMode, setFormMode] = useState("add"); // 'add' or 'edit'
+  // State for form mode (add or edit)
+  const [formMode, setFormMode] = useState("add");
+  // State for form data
   const [formData, setFormData] = useState({
     name: "",
     title: "",
@@ -48,15 +51,14 @@ const AdminDashboard = () => {
     biography: "",
     categories: [],
   });
-  const [currentEditingType, setCurrentEditingType] = useState("expert"); // 'expert' or 'category'
+  // State for selected image
+  const [selectedImage, setSelectedImage] = useState(null);
+  // State for current editing type (expert or category)
+  const [currentEditingType, setCurrentEditingType] = useState("expert");
+  // State for active tab
   const [activeTab, setActiveTab] = useState(0);
 
-  // Handler for tab change in sub-navigation
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
-  };
-
-  // Apollo Client hooks for fetching and manipulating data
+  // Apollo Client Hooks
   const { data: expertsData, refetch: refetchExperts } = useQuery(GET_EXPERTS);
   const {
     data: categoriesData,
@@ -65,7 +67,7 @@ const AdminDashboard = () => {
     refetch: refetchCategories,
   } = useQuery(GET_CATEGORIES);
 
-  // Mutation hooks for CRUD operations on experts and categories
+  // Apollo Client Mutations
   const [addExpert] = useMutation(ADD_EXPERT, {
     onCompleted: () => refetchExperts(),
   });
@@ -85,17 +87,12 @@ const AdminDashboard = () => {
     onCompleted: () => refetchCategories(),
   });
 
-  // Check for loading or error state of categoriesData
-  if (loadingCategories) {
-    return <p>Loading categories...</p>;
-  }
+  // Handle tab change
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
 
-  // Check for error state of categoriesData
-  if (errorCategories) {
-    return <p>Error loading categories: {errorCategories.message}</p>;
-  }
-
-  // Handler functions for CRUD operations
+  // Handle edit click
   const handleEditClick = (item, type) => {
     setSelectedItem(item);
     setFormMode("edit");
@@ -109,7 +106,7 @@ const AdminDashboard = () => {
     });
   };
 
-  // Handler for deleting an expert or category
+  // Handle delete click
   const handleDeleteClick = async (id, type) => {
     if (type === "expert") {
       await deleteExpert({ variables: { id } });
@@ -118,7 +115,7 @@ const AdminDashboard = () => {
     }
   };
 
-  // Handler for adding new expert or category
+  // Handle add new click
   const handleAddNewClick = (type) => {
     setSelectedItem(null);
     setFormMode("add");
@@ -132,7 +129,14 @@ const AdminDashboard = () => {
     });
   };
 
-  // Handler for form submission
+  // Handle image change
+  const handleImageChange = (e) => {
+    if (e.target.files.length > 0) {
+      setSelectedImage(e.target.files[0]);
+    }
+  };
+
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -142,6 +146,7 @@ const AdminDashboard = () => {
           title: formData.title,
           biography: formData.biography,
           categories: formData.categories,
+          // Add image handling here
         };
         if (formMode === "add") {
           await addExpert({ variables: { expertData } });
@@ -174,12 +179,27 @@ const AdminDashboard = () => {
         categories: [],
       });
       setFormMode("add");
+      setSelectedImage(null);
     } catch (error) {
       console.error("Error handling form submission:", error);
     }
   };
 
-  // Main component render
+  // Handle file button click
+  const handleFileButtonClick = () => {
+    document.getElementById("image-upload").click();
+  };
+
+  // Handle loading state
+  if (loadingCategories) {
+    return <p>Loading categories...</p>;
+  }
+
+  // Handle error state
+  if (errorCategories) {
+    return <p>Error loading categories: {errorCategories.message}</p>;
+  }
+
   return (
     <Container maxWidth="lg">
       <Box sx={{ py: { xs: 8, sm: 10, md: 12 } }}>
@@ -328,6 +348,35 @@ const AdminDashboard = () => {
                       }
                       style={{ width: "100%", marginTop: "8px" }}
                     />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      id="image-upload"
+                      style={{ display: "none" }}
+                      onChange={handleImageChange}
+                    />
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleFileButtonClick}
+                      sx={{ mt: 2, mb: 2 }}
+                    >
+                      Upload Image
+                    </Button>
+                    {selectedImage && (
+                      <Box sx={{ mt: 2, mb: 2 }}>
+                        <Typography variant="caption">Preview:</Typography>
+                        <img
+                          src={URL.createObjectURL(selectedImage)}
+                          alt="Preview"
+                          style={{
+                            maxWidth: "100%",
+                            maxHeight: "150px",
+                            display: "block",
+                          }}
+                        />
+                      </Box>
+                    )}{" "}
                     {/* Category Selection for Experts */}
                     <FormControl fullWidth margin="normal">
                       {formData.categories.length === 0 && (
@@ -376,7 +425,7 @@ const AdminDashboard = () => {
                           </MenuItem>
                         ))}
                       </Select>
-                    </FormControl>{" "}
+                    </FormControl>
                   </>
                 )}
                 {currentEditingType === "category" && (
@@ -390,7 +439,6 @@ const AdminDashboard = () => {
                     style={{ width: "100%", marginTop: "8px" }}
                   />
                 )}
-
                 <Button
                   type="submit"
                   variant="contained"
