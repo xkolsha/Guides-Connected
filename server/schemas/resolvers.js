@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import Admin from "../models/Admin.js";
 import Expert from "../models/Expert.js";
 import Category from "../models/Category.js";
+import { uploadImageToCloudinary } from "../utils/cloudinaryConfig.js"; // Import the Cloudinary upload function
 
 // Define the resolvers
 const resolvers = {
@@ -53,9 +54,13 @@ const resolvers = {
       return await Admin.findByIdAndDelete(id);
     },
     addExpert: async (_, { expertData }) => {
+      // If there's an image, upload it to Cloudinary
+      if (expertData.image) {
+        expertData.image = await uploadImageToCloudinary(expertData.image);
+      }
+
       const newExpert = new Expert(expertData);
       await newExpert.save();
-
       // Associate categories with the expert
       if (expertData.categories) {
         await Category.updateMany(
@@ -67,13 +72,17 @@ const resolvers = {
     },
 
     updateExpert: async (_, { id, expertData }) => {
+      // If there's an image update, upload the new image to Cloudinary
+      if (expertData.image) {
+        expertData.image = await uploadImageToCloudinary(expertData.image);
+      }
+
       // Update the expert
       const updatedExpert = await Expert.findByIdAndUpdate(id, expertData, {
         new: true,
       });
 
       // Handle updating expert's categories
-      // Assuming expertData.categories contains the new set of category IDs
       if (expertData.categories) {
         // Remove expert from categories not in the new list
         await Category.updateMany(
@@ -87,8 +96,10 @@ const resolvers = {
           { $addToSet: { experts: id } } // Use $addToSet to avoid duplicates
         );
       }
+
       return updatedExpert;
     },
+
     deleteExpert: async (_, { id }) => {
       return await Expert.findByIdAndDelete(id);
     },

@@ -6,6 +6,9 @@ import { fileURLToPath } from "url"; // Import fileURLToPath method
 import cors from "cors"; // Import cors module
 import db from "./config/db.js"; // Import MongoDB connection
 import { typeDefs, resolvers } from "./schemas/index.js"; // Import typeDefs and resolvers
+import multer from "multer";
+import { uploadImageToCloudinary } from "./utils/cloudinaryConfig.js"; // Import cloudinary config
+import fs from "fs"; // Import fs module
 
 // Initialize Apollo Server
 const server = new ApolloServer({
@@ -22,6 +25,29 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
+// Upload image to Cloudinary
+const upload = multer({ dest: "uploads/" });
+
+app.post("/api/upload", upload.single("file"), async (req, res) => {
+  try {
+    // Upload to Cloudinary
+    const result = await uploadImageToCloudinary(req.file.path);
+
+    // Delete the file from local uploads folder
+    fs.unlink(req.file.path, (err) => {
+      if (err) {
+        console.error("Error deleting file:", err);
+      }
+    });
+
+    // Respond with the URL from Cloudinary
+    res.json({ secure_url: result.url });
+  } catch (error) {
+    console.error("Error uploading to Cloudinary:", error);
+    res.status(500).send("Error uploading image");
+  }
+});
 
 // Start Apollo Server and apply middleware to Express app
 const startApolloServer = async () => {

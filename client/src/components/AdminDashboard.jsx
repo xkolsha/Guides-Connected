@@ -51,10 +51,18 @@ const AdminDashboard = () => {
     biography: "",
     categories: [],
   });
-  // State for selected image
+  // State for the Cloudinary URL
   const [selectedImage, setSelectedImage] = useState(null);
+
+  // State for the file object
+  const [imageFile, setImageFile] = useState(null);
+
+  // Define the setUploadError function
+  const [uploadError, setUploadError] = useState("");
+
   // State for current editing type (expert or category)
   const [currentEditingType, setCurrentEditingType] = useState("expert");
+
   // State for active tab
   const [activeTab, setActiveTab] = useState(0);
 
@@ -129,10 +137,34 @@ const AdminDashboard = () => {
     });
   };
 
-  // Handle image change
-  const handleImageChange = (e) => {
+  // Handle image change for upload
+  const handleImageChange = async (e) => {
     if (e.target.files.length > 0) {
-      setSelectedImage(e.target.files[0]);
+      const file = e.target.files[0];
+      setImageFile(file); // Set the file for pre-upload preview
+      setUploadError("");
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      try {
+        // Upload the image to Cloudinary
+        const response = await fetch("http://localhost:4000/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        setSelectedImage(data.secure_url); // Set URL for post-upload display
+        setImageFile(null); // Clear the file as it's already uploaded
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        setUploadError(`Error uploading image: ${error.message}`);
+      }
     }
   };
 
@@ -140,36 +172,43 @@ const AdminDashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      let payload;
       if (currentEditingType === "expert") {
+        // Construct the expert data, including the Cloudinary image URL
         const expertData = {
           name: formData.name,
           title: formData.title,
           biography: formData.biography,
-          categories: formData.categories,
-          // Add image handling here
+          categories: formData.categories.map((c) => c.value), // Assuming categories is an array of objects with a value key
+          image: selectedImage, // The URL from Cloudinary
         };
+        payload = { expertData };
+
         if (formMode === "add") {
-          await addExpert({ variables: { expertData } });
-        } else {
+          await addExpert({ variables: { expertData: payload } });
+        } else if (formMode === "edit") {
           await updateExpert({
-            variables: { id: selectedItem._id, expertData },
+            variables: { id: selectedItem._id, expertData: payload },
           });
         }
       } else if (currentEditingType === "category") {
+        // Construct the category data
         const categoryData = {
           name: formData.name,
           description: formData.description,
         };
+        payload = { categoryData };
+
         if (formMode === "add") {
-          await addCategory({ variables: { categoryData } });
+          await addCategory({ variables: { categoryData: payload } });
         } else {
           await updateCategory({
-            variables: { id: selectedItem._id, categoryData },
+            variables: { id: selectedItem._id, categoryData: payload },
           });
         }
       }
 
-      // Reset form data and UI state
+      // Reset form data and UI state after successful submission
       setSelectedItem(null);
       setFormData({
         name: "",
@@ -180,6 +219,12 @@ const AdminDashboard = () => {
       });
       setFormMode("add");
       setSelectedImage(null);
+      // Optionally, refetch data to update UI
+      if (currentEditingType === "expert") {
+        refetchExperts();
+      } else {
+        refetchCategories();
+      }
     } catch (error) {
       console.error("Error handling form submission:", error);
     }
@@ -198,6 +243,15 @@ const AdminDashboard = () => {
   // Handle error state
   if (errorCategories) {
     return <p>Error loading categories: {errorCategories.message}</p>;
+  }
+
+  // Determine which image to display: use the local preview or the uploaded image URL
+  const imagePreviewUrl =
+    selectedImage || (imageFile && URL.createObjectURL(imageFile));
+
+  // Make sure to revoke the object URL when it's no longer needed
+  if (imageFile) {
+    window.URL.revokeObjectURL(imageFile);
   }
 
   return (
@@ -376,7 +430,24 @@ const AdminDashboard = () => {
                           }}
                         />
                       </Box>
-                    )}{" "}
+                    )}
+                    <Box sx={{ mt: 2, mb: 2 }}>
+                      {uploadError && (
+                        <Typography color="error">{uploadError}</Typography>
+                      )}
+                      <Typography variant="caption">Image Preview:</Typography>
+                      {imagePreviewUrl && (
+                        <img
+                          src={imagePreviewUrl}
+                          alt="Preview"
+                          style={{
+                            maxWidth: "100%",
+                            maxHeight: "150px",
+                            display: "block",
+                          }}
+                        />
+                      )}
+                    </Box>{" "}
                     {/* Category Selection for Experts */}
                     <FormControl fullWidth margin="normal">
                       {formData.categories.length === 0 && (
