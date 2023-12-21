@@ -146,7 +146,7 @@ const AdminDashboard = () => {
     }
   };
 
-  // Handle form submission
+  // Handle form submission with image upload
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form submission started");
@@ -164,22 +164,32 @@ const AdminDashboard = () => {
           body: formData,
         });
 
-        console.log("Upload response:", await response.json()); // Log Cloudinary's response
+        console.log("Raw response from Cloudinary:", response);
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
         const data = await response.json();
-        cloudinaryUrl = data.secure_url; // Set URL from Cloudinary's response
-        console.log("Image uploaded to Cloudinary: ", cloudinaryUrl);
+        console.log("Parsed data from Cloudinary:", data);
+
+        if (data.secure_url) {
+          cloudinaryUrl = data.secure_url;
+          console.log("Image uploaded to Cloudinary: ", cloudinaryUrl);
+
+          // Update the selectedImage state
+          setSelectedImage(cloudinaryUrl);
+        } else {
+          console.error("No secure URL in response");
+          setUploadError("No secure URL received from Cloudinary");
+          return; // Stop the form submission if image upload fails
+        }
       } catch (error) {
         console.error("Error uploading image:", error);
         setUploadError(`Error uploading image: ${error.message}`);
         return; // Stop the form submission if image upload fails
       }
     }
-
     // Construct the expert or category data based on current editing type
     if (currentEditingType === "expert") {
       // Construct expert data
