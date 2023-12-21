@@ -172,23 +172,22 @@ const AdminDashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let payload;
       if (currentEditingType === "expert") {
         // Construct the expert data, including the Cloudinary image URL
         const expertData = {
           name: formData.name,
           title: formData.title,
           biography: formData.biography,
-          categories: formData.categories.map((c) => c.value), // Assuming categories is an array of objects with a value key
+          categories: formData.categories.map((c) => c.value),
           image: selectedImage, // The URL from Cloudinary
         };
-        payload = { expertData };
 
+        // Use expertData directly in the mutation
         if (formMode === "add") {
-          await addExpert({ variables: { expertData: payload } });
+          await addExpert({ variables: { expertData } });
         } else if (formMode === "edit") {
           await updateExpert({
-            variables: { id: selectedItem._id, expertData: payload },
+            variables: { id: selectedItem._id, expertData },
           });
         }
       } else if (currentEditingType === "category") {
@@ -197,13 +196,13 @@ const AdminDashboard = () => {
           name: formData.name,
           description: formData.description,
         };
-        payload = { categoryData };
 
+        // Use categoryData directly in the mutation
         if (formMode === "add") {
-          await addCategory({ variables: { categoryData: payload } });
+          await addCategory({ variables: { categoryData } });
         } else {
           await updateCategory({
-            variables: { id: selectedItem._id, categoryData: payload },
+            variables: { id: selectedItem._id, categoryData },
           });
         }
       }
