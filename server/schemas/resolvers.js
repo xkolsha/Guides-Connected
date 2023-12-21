@@ -54,13 +54,10 @@ const resolvers = {
       return await Admin.findByIdAndDelete(id);
     },
     addExpert: async (_, { expertData }) => {
-      // If there's an image, upload it to Cloudinary
-      if (expertData.image) {
-        expertData.image = await uploadImageToCloudinary(expertData.image);
-      }
-
+      // Create a new expert document with the received data, including the Cloudinary image URL
       const newExpert = new Expert(expertData);
       await newExpert.save();
+
       // Associate categories with the expert
       if (expertData.categories) {
         await Category.updateMany(
@@ -68,16 +65,12 @@ const resolvers = {
           { $push: { experts: newExpert._id } }
         );
       }
+
       return newExpert;
     },
 
     updateExpert: async (_, { id, expertData }) => {
-      // If there's an image update, upload the new image to Cloudinary
-      if (expertData.image) {
-        expertData.image = await uploadImageToCloudinary(expertData.image);
-      }
-
-      // Update the expert
+      // Update the expert with the received data, including the Cloudinary image URL
       const updatedExpert = await Expert.findByIdAndUpdate(id, expertData, {
         new: true,
       });

@@ -138,95 +138,103 @@ const AdminDashboard = () => {
   };
 
   // Handle image change for upload
-  const handleImageChange = async (e) => {
+  const handleImageChange = (e) => {
     if (e.target.files.length > 0) {
       const file = e.target.files[0];
-      setImageFile(file); // Set the file for pre-upload preview
+      setImageFile(file); // Store the file object for later upload
       setUploadError("");
-
-      const formData = new FormData();
-      formData.append("file", file);
-
-      try {
-        // Upload the image to Cloudinary
-        const response = await fetch("http://localhost:4000/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setSelectedImage(data.secure_url); // Set URL for post-upload display
-        setImageFile(null); // Clear the file as it's already uploaded
-      } catch (error) {
-        console.error("Error uploading image:", error);
-        setUploadError(`Error uploading image: ${error.message}`);
-      }
     }
   };
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      if (currentEditingType === "expert") {
-        // Construct the expert data, including the Cloudinary image URL
-        const expertData = {
-          name: formData.name,
-          title: formData.title,
-          biography: formData.biography,
-          categories: formData.categories.map((c) => c.value),
-          image: selectedImage, // The URL from Cloudinary
-        };
+    console.log("Form submission started");
+    let cloudinaryUrl = selectedImage;
 
-        // Use expertData directly in the mutation
-        if (formMode === "add") {
-          await addExpert({ variables: { expertData } });
-        } else if (formMode === "edit") {
-          await updateExpert({
-            variables: { id: selectedItem._id, expertData },
-          });
+    // Upload the image to Cloudinary if there is an image file
+    if (imageFile) {
+      console.log("Image file exists, uploading to Cloudinary...");
+      try {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+
+        const response = await fetch("http://localhost:4000/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        console.log("Upload response:", await response.json()); // Log Cloudinary's response
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
-      } else if (currentEditingType === "category") {
-        // Construct the category data
-        const categoryData = {
-          name: formData.name,
-          description: formData.description,
-        };
 
-        // Use categoryData directly in the mutation
-        if (formMode === "add") {
-          await addCategory({ variables: { categoryData } });
-        } else {
-          await updateCategory({
-            variables: { id: selectedItem._id, categoryData },
-          });
-        }
+        const data = await response.json();
+        cloudinaryUrl = data.secure_url; // Set URL from Cloudinary's response
+        console.log("Image uploaded to Cloudinary: ", cloudinaryUrl);
+      } catch (error) {
+        console.error("Error uploading image:", error);
+        setUploadError(`Error uploading image: ${error.message}`);
+        return; // Stop the form submission if image upload fails
       }
-
-      // Reset form data and UI state after successful submission
-      setSelectedItem(null);
-      setFormData({
-        name: "",
-        title: "",
-        description: "",
-        biography: "",
-        categories: [],
-      });
-      setFormMode("add");
-      setSelectedImage(null);
-      // Optionally, refetch data to update UI
-      if (currentEditingType === "expert") {
-        refetchExperts();
-      } else {
-        refetchCategories();
-      }
-    } catch (error) {
-      console.error("Error handling form submission:", error);
     }
+
+    // Construct the expert or category data based on current editing type
+    if (currentEditingType === "expert") {
+      // Construct expert data
+      const expertData = {
+        name: formData.name,
+        title: formData.title,
+        biography: formData.biography,
+        categories: formData.categories,
+        image: cloudinaryUrl,
+      };
+      console.log("Expert data to be submitted: ", expertData);
+
+      // Mutation for adding or updating expert
+      if (formMode === "add") {
+        await addExpert({ variables: { expertData } });
+      } else {
+        await updateExpert({ variables: { id: selectedItem._id, expertData } });
+      }
+    } else if (currentEditingType === "category") {
+      // Construct category data
+      const categoryData = {
+        name: formData.name,
+        description: formData.description,
+      };
+      console.log("Category data to be submitted: ", categoryData);
+
+      // Mutation for adding or updating category
+      if (formMode === "add") {
+        await addCategory({ variables: { categoryData } });
+      } else {
+        await updateCategory({
+          variables: { id: selectedItem._id, categoryData },
+        });
+      }
+    }
+
+    // Reset form and state after successful submission
+    console.log("Resetting form and state");
+    resetFormAndState();
+  };
+
+  // Function to reset form and state
+  const resetFormAndState = () => {
+    setSelectedItem(null);
+    setFormData({
+      name: "",
+      title: "",
+      description: "",
+      biography: "",
+      categories: [],
+    });
+    setFormMode("add");
+    setSelectedImage(null);
+    setImageFile(null);
+    setUploadError("");
   };
 
   // Handle file button click
@@ -514,6 +522,7 @@ const AdminDashboard = () => {
                   variant="contained"
                   color="primary"
                   sx={{ mt: 2 }}
+                  // disabled={!selectedImage && currentEditingType === "expert"}
                 >
                   {formMode === "add" ? "Add" : "Update"} {currentEditingType}
                 </Button>
