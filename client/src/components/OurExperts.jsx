@@ -15,6 +15,7 @@ import {
 import { useQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { GET_EXPERTS, GET_CATEGORIES } from "../queries/adminQueries.jsx";
+import WaveBackground from "../assets/images/WaveBackground.webp";
 
 // purpose: display all experts
 const OurExperts = () => {
@@ -86,7 +87,18 @@ const OurExperts = () => {
   };
 
   return (
-    <Box sx={{ py: { xs: 8, sm: 10, md: 12 }, px: isSmallScreen ? 2 : 8 }}>
+    <Box
+      sx={{
+        py: { xs: 8, sm: 10, md: 12 },
+        backgroundImage: `url(${WaveBackground})`,
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+        overflow: "hidden",
+        px: isSmallScreen ? 2 : 8,
+      }}
+    >
       <Typography
         variant="h2"
         color="primary.main"
@@ -120,6 +132,7 @@ const OurExperts = () => {
         <Button
           onClick={() => setActiveCategory(null)}
           variant="outlined"
+          color="error"
           sx={{ m: 1 }}
         >
           Clear Filter
@@ -128,33 +141,52 @@ const OurExperts = () => {
 
       <Grid container spacing={3} justifyContent="center">
         {filteredExperts.map((expert) => (
-          <Grid item xs={12} sm={6} md={4} key={expert._id}>
+          <Grid item xs={12} sm={6} md={3} key={expert._id}>
             <Link
               to={`/experts/${expert._id}`}
               style={{ textDecoration: "none" }}
             >
               <Card
                 elevation={3}
-                sx={{ borderRadius: theme.shape.borderRadius }}
+                sx={{
+                  height: 500,
+                  bgcolor: theme.palette.primary.contrastText,
+                  borderRadius: theme.shape.borderRadius,
+                }}
               >
-                <CardActionArea>
+                <CardActionArea sx={{ height: "100%" }}>
                   <CardMedia
                     component="img"
-                    height="200"
-                    image={expert.imageUrl}
+                    height="200" // Fixed height for image
+                    image={
+                      expert.image || "../assets/images/defaultProfileIMG.jpg"
+                    }
                     alt={expert.name}
-                    sx={{ objectFit: "cover" }}
+                    sx={{
+                      objectFit: "contain",
+                      objectPosition: "center",
+                      borderRadius: theme.shape.borderRadius,
+                      height: "70%",
+                    }} // Adjust object fit and position
                   />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
+                  <CardContent sx={{ height: "30%" }}>
+                    <Typography
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                      sx={{
+                        fontWeight: "bold",
+                        color: theme.palette.primary.main,
+                      }}
+                    >
                       {expert.name}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body1" color="text.secondary">
                       {expert.title}
                     </Typography>
                   </CardContent>
                 </CardActionArea>
-              </Card>
+              </Card>{" "}
             </Link>
           </Grid>
         ))}

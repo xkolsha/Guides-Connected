@@ -2,15 +2,17 @@ import {
   Container,
   Box,
   Typography,
-  Paper,
   Button,
   CircularProgress,
+  useTheme,
+  Chip,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_EXPERT } from "../queries/adminQueries.jsx";
 
 const ExpertDetail = () => {
+  const theme = useTheme();
   const { id } = useParams();
   const { loading, error, data } = useQuery(GET_EXPERT, { variables: { id } });
 
@@ -33,7 +35,7 @@ const ExpertDetail = () => {
           <img
             src={expertData?.image || "../assets/images/defaultProfileIMG.jpg"} // Use the URL from MongoDB
             alt={expertData?.name}
-            style={{ maxWidth: "100%", height: "auto" }}
+            style={{ maxWidth: "85%", height: "auto" }}
           />
         </Box>
 
@@ -43,20 +45,43 @@ const ExpertDetail = () => {
         </Typography>
 
         {/* Expert Biography */}
-        <Typography variant="body1" color={"primary"} paragraph>
+        <Typography
+          variant="body1"
+          color={"primary"}
+          marginBottom={6}
+          paragraph
+        >
           {expertData?.biography}
         </Typography>
 
         {/* Categories Section */}
         {expertData?.categories && expertData.categories.length > 0 && (
           <Box sx={{ my: 2 }}>
-            <Typography variant="h6" color={"primary"}>
+            <Typography
+              variant="h6"
+              color={"primary"}
+              sx={{
+                color: theme.palette.text.primary,
+                mb: 1,
+              }}
+            >
               Categories
             </Typography>
             {expertData.categories.map((category, index) => (
-              <Paper key={index} sx={{ p: 2, my: 1 }}>
-                <Typography variant="body1">{category.name}</Typography>
-              </Paper>
+              <Chip
+                key={index}
+                label={category.name}
+                sx={{
+                  bgcolor: theme.palette.primary.contrastText,
+
+                  color: theme.palette.text.primary,
+                  mr: 0.5,
+                }}
+              >
+                <Typography variant="body1" sx={{}}>
+                  {category.name}
+                </Typography>
+              </Chip>
             ))}
           </Box>
         )}
@@ -73,7 +98,7 @@ const ExpertDetail = () => {
         )}
 
         {/* Consultation Button */}
-        <Button variant="contained" sx={{ mt: 2 }}>
+        <Button variant="contained" sx={{ mt: 3 }}>
           Schedule a Consultation
         </Button>
       </Box>
