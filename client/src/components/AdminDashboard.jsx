@@ -110,6 +110,7 @@ const AdminDashboard = () => {
       title: item.title || "",
       description: item.description || "",
       biography: item.biography || "",
+      image: item.image || "",
       categories: type === "expert" ? item.categories.map((c) => c._id) : [],
     });
   };
