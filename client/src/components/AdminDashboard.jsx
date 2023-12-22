@@ -1,5 +1,9 @@
 import { useState } from "react";
+
+//  Apollo Client Hooks
 import { useQuery, useMutation } from "@apollo/client";
+
+// GraphQL Queries and Mutations
 import {
   GET_EXPERTS,
   GET_CATEGORIES,
@@ -10,6 +14,8 @@ import {
   UPDATE_CATEGORY,
   DELETE_CATEGORY,
 } from "../queries/adminQueries.jsx";
+
+// Material UI Components
 import {
   Button,
   TextField,
@@ -17,37 +23,59 @@ import {
   Paper,
   Typography,
   Box,
-  TextareaAutosize,
   Tabs,
   Tab,
+  Container,
+  TextareaAutosize,
+  useTheme,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Chip,
+  Tooltip,
 } from "@mui/material";
 
 const AdminDashboard = () => {
-  // State for handling form data and UI
+  // Use the theme
+  const theme = useTheme();
+  // State for form data
   const [selectedItem, setSelectedItem] = useState(null);
-  const [formMode, setFormMode] = useState("add"); // 'add' or 'edit'
+  // State for form mode (add or edit)
+  const [formMode, setFormMode] = useState("add");
+  // State for form data
   const [formData, setFormData] = useState({
     name: "",
     title: "",
     description: "",
     biography: "",
+    categories: [],
   });
-  const [currentEditingType, setCurrentEditingType] = useState("expert"); // 'expert' or 'category'
+  // State for the Cloudinary URL
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  // State for managing the active tab in sub-navigation
+  // State for the file object
+  const [imageFile, setImageFile] = useState(null);
+
+  // Define the setUploadError function
+  const [uploadError, setUploadError] = useState("");
+
+  // State for current editing type (expert or category)
+  const [currentEditingType, setCurrentEditingType] = useState("expert");
+
+  // State for active tab
   const [activeTab, setActiveTab] = useState(0);
 
-  // Handler for tab change in sub-navigation
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
-  };
-
-  // Apollo Client hooks for fetching and manipulating data
+  // Apollo Client Hooks
   const { data: expertsData, refetch: refetchExperts } = useQuery(GET_EXPERTS);
-  const { data: categoriesData, refetch: refetchCategories } =
-    useQuery(GET_CATEGORIES);
+  const {
+    data: categoriesData,
+    loading: loadingCategories,
+    error: errorCategories,
+    refetch: refetchCategories,
+  } = useQuery(GET_CATEGORIES);
 
-  // Mutation hooks for CRUD operations on experts and categories
+  // Apollo Client Mutations
   const [addExpert] = useMutation(ADD_EXPERT, {
     onCompleted: () => refetchExperts(),
   });
@@ -67,7 +95,12 @@ const AdminDashboard = () => {
     onCompleted: () => refetchCategories(),
   });
 
-  // Handler functions for CRUD operations
+  // Handle tab change
+  const handleTabChange = (event, newValue) => {
+    setActiveTab(newValue);
+  };
+
+  // Handle edit click
   const handleEditClick = (item, type) => {
     setSelectedItem(item);
     setFormMode("edit");
@@ -77,9 +110,12 @@ const AdminDashboard = () => {
       title: item.title || "",
       description: item.description || "",
       biography: item.biography || "",
+      image: item.image || "",
+      categories: type === "expert" ? item.categories.map((c) => c._id) : [],
     });
   };
 
+  // Handle delete click
   const handleDeleteClick = async (id, type) => {
     if (type === "expert") {
       await deleteExpert({ variables: { id } });
@@ -88,213 +124,420 @@ const AdminDashboard = () => {
     }
   };
 
+  // Handle add new click
   const handleAddNewClick = (type) => {
     setSelectedItem(null);
     setFormMode("add");
     setCurrentEditingType(type);
-    setFormData({ name: "", title: "", description: "", biography: "" });
+    setFormData({
+      name: "",
+      title: "",
+      description: "",
+      biography: "",
+      categories: [],
+    });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (currentEditingType === "expert") {
-        const expertData = {
-          name: formData.name,
-          title: formData.title,
-          biography: formData.biography,
-        };
-        if (formMode === "add") {
-          await addExpert({ variables: { expertData } });
-        } else {
-          await updateExpert({
-            variables: { id: selectedItem._id, expertData },
-          });
-        }
-      } else if (currentEditingType === "category") {
-        const categoryData = {
-          name: formData.name,
-          description: formData.description,
-        };
-        if (formMode === "add") {
-          await addCategory({ variables: { categoryData } });
-        } else {
-          await updateCategory({
-            variables: { id: selectedItem._id, categoryData },
-          });
-        }
-      }
-      setSelectedItem(null);
-      setFormData({ name: "", title: "", description: "", biography: "" });
-      setFormMode("add");
-    } catch (error) {
-      console.error("Error handling form submission:", error);
+  // Handle image change for upload
+  const handleImageChange = (e) => {
+    if (e.target.files.length > 0) {
+      const file = e.target.files[0];
+      setImageFile(file); // Store the file object for later upload
+      setUploadError("");
     }
   };
 
-  // Main component render
+  // Handle form submission with image upload
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let cloudinaryUrl = selectedImage;
+
+    if (imageFile) {
+      try {
+        const formData = new FormData();
+        formData.append("file", imageFile);
+        formData.append(
+          "upload_preset",
+          import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+        );
+
+        const response = await fetch(
+          `https://api.cloudinary.com/v1_1/${
+            import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+          }/image/upload`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        if (data.secure_url) {
+          cloudinaryUrl = data.secure_url;
+        } else {
+          setUploadError("No secure URL received from Cloudinary");
+          return;
+        }
+      } catch (error) {
+        setUploadError(`Error uploading image: ${error.message}`);
+        return;
+      }
+    } // Construct the expert or category data based on current editing type
+    if (currentEditingType === "expert") {
+      // Construct expert data
+      const expertData = {
+        name: formData.name,
+        title: formData.title,
+        biography: formData.biography,
+        categories: formData.categories,
+        image: cloudinaryUrl,
+      };
+      console.log("Expert data to be submitted: ", expertData);
+
+      // Mutation for adding or updating expert
+      if (formMode === "add") {
+        await addExpert({ variables: { expertData } });
+      } else {
+        await updateExpert({ variables: { id: selectedItem._id, expertData } });
+      }
+    } else if (currentEditingType === "category") {
+      // Construct category data
+      const categoryData = {
+        name: formData.name,
+        description: formData.description,
+      };
+      console.log("Category data to be submitted: ", categoryData);
+
+      // Mutation for adding or updating category
+      if (formMode === "add") {
+        await addCategory({ variables: { categoryData } });
+      } else {
+        await updateCategory({
+          variables: { id: selectedItem._id, categoryData },
+        });
+      }
+    }
+
+    // Reset form and state after successful submission
+    console.log("Resetting form and state");
+    resetFormAndState();
+  };
+
+  // Function to reset form and state
+  const resetFormAndState = () => {
+    setSelectedItem(null);
+    setFormData({
+      name: "",
+      title: "",
+      description: "",
+      biography: "",
+      categories: [],
+    });
+    setFormMode("add");
+    setSelectedImage(null);
+    setImageFile(null);
+    setUploadError("");
+  };
+
+  // Handle file button click
+  const handleFileButtonClick = () => {
+    document.getElementById("image-upload").click();
+  };
+
+  // Handle loading state
+  if (loadingCategories) {
+    return <p>Loading categories...</p>;
+  }
+
+  // Handle error state
+  if (errorCategories) {
+    return <p>Error loading categories: {errorCategories.message}</p>;
+  }
+
+  // Determine which image to display: use the local preview or the uploaded image URL
+  const imagePreviewUrl =
+    selectedImage || (imageFile && URL.createObjectURL(imageFile));
+
+  // Make sure to revoke the object URL when it's no longer needed
+  if (imageFile) {
+    window.URL.revokeObjectURL(imageFile);
+  }
+
   return (
-    <Box
-      sx={{
-        flexGrow: 1,
-        my: 4,
-        py: 12,
-        maxHeight: "100svh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Typography variant="h4" gutterBottom sx={{ mb: 6, fontWeight: "bold" }}>
-        Admin Dashboard
-      </Typography>
+    <Container maxWidth="lg">
+      <Box sx={{ py: { xs: 8, sm: 10, md: 12 } }}>
+        <Typography
+          variant="h2"
+          gutterBottom
+          align="center"
+          fontWeight={"bold"}
+        >
+          Admin Dashboard
+          <span style={{ color: "#FF5733" }}>.</span>
+        </Typography>
 
-      {/* Sub-navigation Tabs */}
-      <Tabs value={activeTab} onChange={handleTabChange} centered sx={{ p: 4 }}>
-        <Tab label="Manage Experts" />
-        <Tab label="Manage Categories" />
-      </Tabs>
+        <Tabs
+          value={activeTab}
+          onChange={handleTabChange}
+          centered
+          sx={{ mb: 3 }}
+        >
+          <Tab label="Manage Experts" />
+          <Tab label="Manage Categories" />
+        </Tabs>
 
-      {/* Conditional Rendering of Experts and Categories Management Sections */}
-      {activeTab === 0 && (
-        <Grid item xs={12} md={6} mb={3}>
-          <Paper sx={{ p: 6 }}>
-            {expertsData?.getExperts.map((expert) => (
-              <Box key={expert._id} sx={{ mb: 3 }}>
-                <Typography variant="body1" mb={1}>
-                  {expert.name} - {expert.title}
-                </Typography>
+        <Grid container spacing={3} justifyContent="center">
+          {/* Experts Management Section */}
+          {activeTab === 0 && (
+            <Grid item xs={12} md={6}>
+              <Paper sx={{ p: 4, borderRadius: theme.shape.borderRadius }}>
+                {/* Experts List Rendering */}
+                {expertsData?.getExperts.map((expert) => (
+                  <Box key={expert._id} sx={{ mb: 3 }}>
+                    <Typography variant="body1" mb={1}>
+                      {expert.name} - {expert.title}
+                    </Typography>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ mr: 1 }}
+                      onClick={() => handleEditClick(expert, "expert")}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() => handleDeleteClick(expert._id, "expert")}
+                    >
+                      Delete
+                    </Button>
+                  </Box>
+                ))}
                 <Button
                   variant="contained"
-                  color="primary"
-                  sx={{ mr: 1 }}
-                  onClick={() => handleEditClick(expert, "expert")}
+                  color="secondary"
+                  onClick={() => handleAddNewClick("expert")}
+                  sx={{ mt: 1 }}
                 >
-                  Edit
+                  Add Expert
                 </Button>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  onClick={() => handleDeleteClick(expert._id, "expert")}
-                >
-                  Delete
-                </Button>
-              </Box>
-            ))}
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => handleAddNewClick("expert")}
-              sx={{ mt: 1 }}
-            >
-              Add Expert
-            </Button>
-          </Paper>
-        </Grid>
-      )}
-      {activeTab === 1 && (
-        <Grid item xs={12} md={6} mb={3}>
-          <Paper sx={{ p: 6 }}>
-            {categoriesData?.getCategories.map((category) => (
-              <Box key={category._id} sx={{ mb: 3 }}>
-                <Typography variant="body1" mb={1}>
-                  {category.name}
-                </Typography>
+              </Paper>
+            </Grid>
+          )}
+
+          {/* Categories Management Section */}
+          {activeTab === 1 && (
+            <Grid item xs={12} md={6}>
+              <Paper sx={{ p: 4, borderRadius: theme.shape.borderRadius }}>
+                {/* Categories List Rendering */}
+                {categoriesData?.getCategories.map((category) => (
+                  <Box key={category._id} sx={{ mb: 3 }}>
+                    <Typography variant="body1" mb={1}>
+                      {category.name}
+                    </Typography>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{ mr: 1 }}
+                      onClick={() => handleEditClick(category, "category")}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() =>
+                        handleDeleteClick(category._id, "category")
+                      }
+                    >
+                      Delete
+                    </Button>
+                  </Box>
+                ))}
                 <Button
                   variant="contained"
-                  color="primary"
-                  sx={{ mr: 1 }}
-                  onClick={() => handleEditClick(category, "category")}
+                  color="secondary"
+                  onClick={() => handleAddNewClick("category")}
+                  sx={{ mt: 1 }}
                 >
-                  Edit
+                  Add Category
                 </Button>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  onClick={() => handleDeleteClick(category._id, "category")}
-                >
-                  Delete
-                </Button>
-              </Box>
-            ))}
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => handleAddNewClick("category")}
-            >
-              Add Category
-            </Button>
-          </Paper>
-        </Grid>
-      )}
+              </Paper>
+            </Grid>
+          )}
 
-      {/* Form for Adding/Editing Experts or Categories */}
-      <Grid item xs={12}>
-        <Paper sx={{ p: 3 }}>
-          <Typography variant="h6">
-            {formMode === "add"
-              ? `Add New ${currentEditingType}`
-              : `Edit ${currentEditingType}`}
-          </Typography>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              label="Name"
-              variant="outlined"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              required
-              fullWidth
-              margin="normal"
-            />
-            {currentEditingType === "expert" && (
-              <>
+          {/* Form for Adding/Editing Experts or Categories */}
+          <Grid item xs={12}>
+            <Paper sx={{ p: 4, borderRadius: theme.shape.borderRadius }}>
+              <Typography variant="h6">
+                {formMode === "add"
+                  ? `Add New ${currentEditingType}`
+                  : `Edit ${currentEditingType}`}
+              </Typography>
+              {/* Form elements here */}
+              <form onSubmit={handleSubmit}>
                 <TextField
-                  label="Title"
+                  label="Name"
                   variant="outlined"
-                  value={formData.title}
+                  value={formData.name}
                   onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
+                    setFormData({ ...formData, name: e.target.value })
                   }
+                  required
                   fullWidth
                   margin="normal"
                 />
-                <TextareaAutosize
-                  minRows={3}
-                  placeholder="Biography"
-                  value={formData.biography}
-                  onChange={(e) =>
-                    setFormData({ ...formData, biography: e.target.value })
-                  }
-                  style={{ width: "100%", marginTop: "8px" }}
-                />
-              </>
-            )}
-            {currentEditingType === "category" && (
-              <TextareaAutosize
-                minRows={3}
-                placeholder="Description"
-                value={formData.description}
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-                style={{ width: "100%", marginTop: "8px" }}
-              />
-            )}
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              sx={{ mt: 2 }}
-            >
-              {formMode === "add" ? "Add" : "Update"} {currentEditingType}
-            </Button>
-          </form>
-        </Paper>
-      </Grid>
-    </Box>
+
+                {/* Conditional Form Fields based on Current Editing Type */}
+                {currentEditingType === "expert" && (
+                  <>
+                    <TextField
+                      label="Title"
+                      variant="outlined"
+                      value={formData.title}
+                      onChange={(e) =>
+                        setFormData({ ...formData, title: e.target.value })
+                      }
+                      fullWidth
+                      margin="normal"
+                    />
+                    <TextareaAutosize
+                      minRows={3}
+                      placeholder="Biography"
+                      value={formData.biography}
+                      onChange={(e) =>
+                        setFormData({ ...formData, biography: e.target.value })
+                      }
+                      style={{ width: "100%", marginTop: "8px" }}
+                    />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      id="image-upload"
+                      style={{ display: "none" }}
+                      onChange={handleImageChange}
+                    />
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleFileButtonClick}
+                      sx={{ mt: 2, mb: 2 }}
+                    >
+                      Upload Image
+                    </Button>
+                    {selectedImage && (
+                      <Box sx={{ mt: 2, mb: 2 }}>
+                        <Typography variant="caption">Preview:</Typography>
+                        <img
+                          src={URL.createObjectURL(selectedImage)}
+                          alt="Preview"
+                          style={{
+                            maxWidth: "100%",
+                            maxHeight: "150px",
+                            display: "block",
+                          }}
+                        />
+                      </Box>
+                    )}
+                    <Box sx={{ mt: 2, mb: 2 }}>
+                      {uploadError && (
+                        <Typography color="error">{uploadError}</Typography>
+                      )}
+                      <Typography variant="caption">Image Preview:</Typography>
+                      {imagePreviewUrl && (
+                        <img
+                          src={imagePreviewUrl}
+                          alt="Preview"
+                          style={{
+                            maxWidth: "100%",
+                            maxHeight: "150px",
+                            display: "block",
+                          }}
+                        />
+                      )}
+                    </Box>{" "}
+                    {/* Category Selection for Experts */}
+                    <FormControl fullWidth margin="normal">
+                      {formData.categories.length === 0 && (
+                        <InputLabel>Categories</InputLabel>
+                      )}
+                      <Select
+                        multiple
+                        value={formData.categories}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            categories: e.target.value,
+                          })
+                        }
+                        renderValue={(selected) => (
+                          <Box
+                            sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+                          >
+                            {selected.map((id) => {
+                              const category =
+                                categoriesData.getCategories.find(
+                                  (cat) => cat._id === id
+                                );
+                              return (
+                                <Tooltip key={id} title={category?.name || id}>
+                                  <Chip
+                                    label={category?.name || id}
+                                    style={{ maxWidth: 150 }}
+                                  />
+                                </Tooltip>
+                              );
+                            })}
+                          </Box>
+                        )}
+                        MenuProps={{
+                          PaperProps: {
+                            style: {
+                              maxHeight: 224,
+                            },
+                          },
+                        }}
+                      >
+                        {categoriesData.getCategories.map((category) => (
+                          <MenuItem key={category._id} value={category._id}>
+                            {category.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </>
+                )}
+                {currentEditingType === "category" && (
+                  <TextareaAutosize
+                    minRows={3}
+                    placeholder="Description"
+                    value={formData.description}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
+                    style={{ width: "100%", marginTop: "8px" }}
+                  />
+                )}
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  sx={{ mt: 2 }}
+                  // disabled={!selectedImage && currentEditingType === "expert"}
+                >
+                  {formMode === "add" ? "Add" : "Update"} {currentEditingType}
+                </Button>
+              </form>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Box>
+    </Container>
   );
 };
 

@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import Admin from "../models/Admin.js";
 import Expert from "../models/Expert.js";
 import Category from "../models/Category.js";
+import { uploadImageToCloudinary } from "../utils/cloudinaryConfig.js"; // Import the Cloudinary upload function
 
 // Define the resolvers
 const resolvers = {
@@ -53,6 +54,7 @@ const resolvers = {
       return await Admin.findByIdAndDelete(id);
     },
     addExpert: async (_, { expertData }) => {
+      // Create a new expert document with the received data, including the Cloudinary image URL
       const newExpert = new Expert(expertData);
       await newExpert.save();
 
@@ -63,17 +65,17 @@ const resolvers = {
           { $push: { experts: newExpert._id } }
         );
       }
+
       return newExpert;
     },
 
     updateExpert: async (_, { id, expertData }) => {
-      // Update the expert
+      // Update the expert with the received data, including the Cloudinary image URL
       const updatedExpert = await Expert.findByIdAndUpdate(id, expertData, {
         new: true,
       });
 
       // Handle updating expert's categories
-      // Assuming expertData.categories contains the new set of category IDs
       if (expertData.categories) {
         // Remove expert from categories not in the new list
         await Category.updateMany(
@@ -87,8 +89,10 @@ const resolvers = {
           { $addToSet: { experts: id } } // Use $addToSet to avoid duplicates
         );
       }
+
       return updatedExpert;
     },
+
     deleteExpert: async (_, { id }) => {
       return await Expert.findByIdAndDelete(id);
     },

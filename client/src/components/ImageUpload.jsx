@@ -1,7 +1,6 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
 import { Button } from "@mui/material";
-import { Cloudinary } from "@cloudinary/url-gen";
 
 const ImageUpload = ({ onUploadComplete }) => {
   const [imageFile, setImageFile] = useState(null);
@@ -13,12 +12,25 @@ const ImageUpload = ({ onUploadComplete }) => {
   const handleUpload = async () => {
     if (!imageFile) return;
 
-    const cld = new Cloudinary({ cloud: { cloudName: "YOUR_CLOUD_NAME" } });
-    const upload = await cld.uploader.upload(imageFile, {
-      folder: "expert_images",
-    });
+    const formData = new FormData();
+    formData.append("file", imageFile);
 
-    onUploadComplete(upload.secure_url);
+    try {
+      const response = await fetch("/api/upload", {
+        // Adjust the endpoint as needed
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to upload image");
+      }
+
+      const result = await response.json();
+      onUploadComplete(result.secure_url); // Assuming 'secure_url' is returned from your server
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
   };
 
   return (
