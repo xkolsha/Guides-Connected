@@ -150,48 +150,43 @@ const AdminDashboard = () => {
   // Handle form submission with image upload
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submission started");
     let cloudinaryUrl = selectedImage;
 
-    // Upload the image to Cloudinary if there is an image file
     if (imageFile) {
-      console.log("Image file exists, uploading to Cloudinary...");
       try {
         const formData = new FormData();
         formData.append("file", imageFile);
+        formData.append(
+          "upload_preset",
+          import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
+        );
 
-        const response = await fetch("http://localhost:4000/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-
-        console.log("Raw response from Cloudinary:", response);
+        const response = await fetch(
+          `https://api.cloudinary.com/v1_1/${
+            import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+          }/image/upload`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
         const data = await response.json();
-        console.log("Parsed data from Cloudinary:", data);
-
         if (data.secure_url) {
           cloudinaryUrl = data.secure_url;
-          console.log("Image uploaded to Cloudinary: ", cloudinaryUrl);
-
-          // Update the selectedImage state
-          setSelectedImage(cloudinaryUrl);
         } else {
-          console.error("No secure URL in response");
           setUploadError("No secure URL received from Cloudinary");
-          return; // Stop the form submission if image upload fails
+          return;
         }
       } catch (error) {
-        console.error("Error uploading image:", error);
         setUploadError(`Error uploading image: ${error.message}`);
-        return; // Stop the form submission if image upload fails
+        return;
       }
-    }
-    // Construct the expert or category data based on current editing type
+    } // Construct the expert or category data based on current editing type
     if (currentEditingType === "expert") {
       // Construct expert data
       const expertData = {
