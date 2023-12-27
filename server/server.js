@@ -9,6 +9,7 @@ import { typeDefs, resolvers } from "./schemas/index.js"; // Import typeDefs and
 import multer from "multer";
 import { uploadImageToCloudinary } from "./utils/cloudinaryConfig.js"; // Import cloudinary config
 import fs from "fs"; // Import fs module
+import nodemailer from "nodemailer"; // Import nodemailer
 
 // Initialize Apollo Server
 const server = new ApolloServer({
@@ -46,6 +47,37 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
   } catch (error) {
     console.error("Error uploading to Cloudinary:", error);
     res.status(500).send("Error uploading image");
+  }
+});
+
+// Nodemailer transporter setup
+const transporter = nodemailer.createTransport({
+  service: "your-email-service", // e.g., 'Gmail'
+  auth: {
+    user: process.env.EMAIL_USERNAME, // Your email address
+    pass: process.env.EMAIL_PASSWORD, // Your email password
+  },
+});
+
+// Email API endpoint
+app.post("/api/send-email", async (req, res) => {
+  const { name, email, message } = req.body;
+
+  try {
+    const mailOptions = {
+      from: `"${name}" <${email}>`, // Sender address
+      to: process.env.RECIPIENT_EMAIL, // List of receivers
+      subject: "New Contact Form Submission", // Subject line
+      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`, // Plain text body
+      // Optionally, you can add HTML body content here
+    };
+
+    // Send the email
+    const info = await transporter.sendMail(mailOptions);
+    res.json({ message: "Email sent successfully", info });
+  } catch (error) {
+    console.error("Error sending email:", error);
+    res.status(500).send("Error sending email");
   }
 });
 

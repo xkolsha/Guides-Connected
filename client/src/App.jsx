@@ -3,6 +3,7 @@ import { ApolloProvider } from "@apollo/client";
 import client from "./apolloClient"; // Import the Apollo Client instance
 import { ThemeProvider, Box } from "@mui/material";
 import theme from "./theme";
+import ScrollToTop from "./components/ScrollToTop";
 import Navigation from "./components/Navigation";
 import Hero from "./components/Hero";
 import Landing from "./components/Landing";
@@ -14,6 +15,7 @@ import ExpertDetail from "./components/ExpertDetail";
 import AdminLogin from "./components/AdminLogin";
 import AdminDashboard from "./components/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ContactUs from "./components/ContactUs";
 
 function App() {
   return (
@@ -22,6 +24,7 @@ function App() {
       {/* Wrap with ApolloProvider */}
       <ThemeProvider theme={theme}>
         <Router>
+          <ScrollToTop />
           <Box sx={{ bgcolor: "background.default", minHeight: "100svh" }}>
             <Navigation />
             <Routes>
@@ -45,6 +48,7 @@ function App() {
               {/* About Route */}
               <Route path="/about" element={<About />} />
               <Route path="/experts" element={<OurExperts />} />
+              <Route path="/contact" element={<ContactUs />} />
               <Route path="/experts/:id" element={<ExpertDetail />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route
