@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Typography, Button, Box, Grid, Paper, Container } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import proffessionalLearning from "../assets/images/professionalLearning.png";
@@ -6,6 +7,7 @@ import drivenByValues from "../assets/images/drivenByValues.png";
 
 const Landing = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   return (
     <Box>
@@ -48,6 +50,7 @@ const Landing = () => {
                 sx={{
                   mt: 3,
                 }}
+                onClick={() => navigate("/about")} // Added onClick event
               >
                 Learn More
               </Button>
@@ -132,6 +135,7 @@ const Landing = () => {
                 sx={{
                   mt: 3,
                 }}
+                onClick={() => navigate("/about")} // Added onClick event
               >
                 Learn More
               </Button>
@@ -163,6 +167,7 @@ const Landing = () => {
                 sx={{
                   mt: 3,
                 }}
+                onClick={() => navigate("/about")} // Added onClick event
               >
                 Learn More
               </Button>
