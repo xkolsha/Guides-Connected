@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Container,
   Box,
@@ -10,16 +11,23 @@ import {
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_EXPERT } from "../queries/adminQueries.jsx";
+import { InlineWidget } from "react-calendly";
 
 const ExpertDetail = () => {
   const theme = useTheme();
   const { id } = useParams();
   const { loading, error, data } = useQuery(GET_EXPERT, { variables: { id } });
 
+  const [showCalendly, setShowCalendly] = useState(false);
+
   if (loading) return <CircularProgress />;
   if (error) return <p>Error: {error.message}</p>;
 
   const expertData = data?.getExpert;
+
+  const handleScheduleClick = () => {
+    setShowCalendly(true);
+  };
 
   return (
     <Container maxWidth="lg">
@@ -73,7 +81,6 @@ const ExpertDetail = () => {
                 label={category.name}
                 sx={{
                   bgcolor: theme.palette.primary.contrastText,
-
                   color: theme.palette.text.primary,
                   mr: 0.5,
                 }}
@@ -97,10 +104,19 @@ const ExpertDetail = () => {
           </Box>
         )}
 
+        {/* Show Calendly Widget */}
+        {showCalendly && <InlineWidget url="https://calendly.com/aviadkohn" />}
+
         {/* Consultation Button */}
-        <Button variant="contained" sx={{ mt: 3 }}>
-          Schedule a Consultation
-        </Button>
+        {!showCalendly && (
+          <Button
+            variant="contained"
+            sx={{ mt: 3 }}
+            onClick={handleScheduleClick}
+          >
+            Schedule a Consultation
+          </Button>
+        )}
       </Box>
     </Container>
   );
