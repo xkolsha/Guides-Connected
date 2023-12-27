@@ -15,6 +15,7 @@ import ExpertDetail from "./components/ExpertDetail";
 import AdminLogin from "./components/AdminLogin";
 import AdminDashboard from "./components/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ContactUs from "./components/ContactUs";
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
               {/* About Route */}
               <Route path="/about" element={<About />} />
               <Route path="/experts" element={<OurExperts />} />
+              <Route path="/contact" element={<ContactUs />} />
               <Route path="/experts/:id" element={<ExpertDetail />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route
