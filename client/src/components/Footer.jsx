@@ -1,7 +1,9 @@
 import { Box, Typography, Link, Container, Grid } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -32,13 +34,31 @@ const Footer = () => {
             </Typography>
           </Grid>
           <Grid item xs={12} md="auto" textAlign="center">
-            <Link href="#" underline="none" color="inherit" sx={{ mx: 3 }}>
+            <Link
+              href="#"
+              underline="none"
+              color="inherit"
+              sx={{ mx: 3 }}
+              onClick={() => navigate("/about")}
+            >
               About
             </Link>
-            <Link href="#" underline="none" color="inherit" sx={{ mx: 3 }}>
+            <Link
+              href="#"
+              underline="none"
+              color="inherit"
+              sx={{ mx: 3 }}
+              onClick={() => navigate("/experts")}
+            >
               Experts
             </Link>
-            <Link href="#" underline="none" color="inherit" sx={{ mx: 3 }}>
+            <Link
+              href="#"
+              underline="none"
+              color="inherit"
+              sx={{ mx: 3 }}
+              onClick={() => navigate("/contact")}
+            >
               Contact Us
             </Link>
           </Grid>

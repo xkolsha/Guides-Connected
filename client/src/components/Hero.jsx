@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Typography, Button, Box, Grid, Container } from "@mui/material";
 import HeroPhoto from "../assets/images/Hero.svg";
 import { useTheme } from "@mui/material/styles";
@@ -5,6 +6,7 @@ import WaveBackground from "../assets/images/WaveBackground.webp";
 
 const Hero = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -41,10 +43,19 @@ const Hero = () => {
               Expert guides for any subject. Instant access customized for you
             </Typography>
             <Box sx={{ mt: 4 }}>
-              <Button variant="contained" color="primary" sx={{ mr: 3 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ mr: 3 }}
+                onClick={() => navigate("/contact")} // Added onClick event
+              >
                 Work With Us
               </Button>
-              <Button variant="outlined" color="primary">
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => navigate("/about")} // Added onClick event
+              >
                 Learn More
               </Button>
             </Box>
