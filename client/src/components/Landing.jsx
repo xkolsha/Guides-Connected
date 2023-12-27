@@ -1,5 +1,8 @@
 import { Typography, Button, Box, Grid, Paper, Container } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import proffessionalLearning from "../assets/images/professionalLearning.png";
+import classroomEnrichment from "../assets/images/classroomEnrichment.png";
+import drivenByValues from "../assets/images/drivenByValues.png";
 
 const Landing = () => {
   const theme = useTheme();
@@ -39,6 +42,15 @@ const Landing = () => {
                   </Typography>
                 </li>
               </ul>
+              <Button
+                variant="outlined"
+                color="error"
+                sx={{
+                  mt: 3,
+                }}
+              >
+                Learn More
+              </Button>
             </Grid>
             <Grid item xs={12} md={6}>
               {/* Placeholder for image */}
@@ -48,6 +60,10 @@ const Landing = () => {
                   height: 360,
                   width: "100%",
                   borderRadius: theme.shape.borderRadius,
+                  backgroundImage: `url(${proffessionalLearning})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
                 }}
               />
             </Grid>
@@ -95,6 +111,10 @@ const Landing = () => {
                   height: 360,
                   width: "100%",
                   borderRadius: theme.shape.borderRadius,
+                  backgroundImage: `url(${classroomEnrichment})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
                 }}
               />
             </Grid>
@@ -107,7 +127,14 @@ const Landing = () => {
                 Bring experts into the classroom with the latest distance
                 learning platforms.
               </Typography>
-              <Button variant="outlined">Learn More</Button>
+              <Button
+                variant="outlined"
+                sx={{
+                  mt: 3,
+                }}
+              >
+                Learn More
+              </Button>
             </Grid>
           </Grid>
         </Container>
@@ -131,7 +158,14 @@ const Landing = () => {
               <Typography variant="body1">
                 We believe knowledge should be accessible to everyone.
               </Typography>
-              <Button variant="outlined">Learn More</Button>
+              <Button
+                variant="outlined"
+                sx={{
+                  mt: 3,
+                }}
+              >
+                Learn More
+              </Button>
             </Grid>
             <Grid item xs={12} md={6}>
               {/* Another placeholder for image */}
@@ -141,6 +175,10 @@ const Landing = () => {
                   height: 360,
                   width: "100%",
                   borderRadius: theme.shape.borderRadius,
+                  backgroundImage: `url(${drivenByValues})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
                 }}
               />
             </Grid>
