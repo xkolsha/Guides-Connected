@@ -111,12 +111,15 @@ const ContactUs = () => {
               Contact Us
             </Typography>
             <Typography sx={{ mb: 1 }}>
-              <b>Phone:</b> +1 (506) 123 4567
+              <b>Phone:</b> +1 (506) 261 2532
             </Typography>
             <Typography sx={{ mb: 4 }}>
               <b>Email:</b>{" "}
-              <EmailLink href="mailto:fowler-moon@fvl.com" color="error">
-                fowler-moon@fvl.com
+              <EmailLink
+                href="mailto:matthewasears@guidesconnected.com"
+                color="error"
+              >
+                matthewasears@guidesconnected.com
               </EmailLink>
             </Typography>
 
