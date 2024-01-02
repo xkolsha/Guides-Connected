@@ -105,7 +105,9 @@ const ExpertDetail = () => {
         )}
 
         {/* Show Calendly Widget */}
-        {showCalendly && <InlineWidget url="https://calendly.com/aviadkohn" />}
+        {showCalendly && (
+          <InlineWidget url="https://calendly.com/matthewasears" />
+        )}
 
         {/* Consultation Button */}
         {!showCalendly && (
