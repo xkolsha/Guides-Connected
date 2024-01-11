@@ -39,6 +39,7 @@ Guides-Connected uses a range of technologies for both client-side and server-si
 - JSON Web Tokens
 - Bcryptjs
 - Nodemailer
+- Various other libraries
 
 ## Installation
 
