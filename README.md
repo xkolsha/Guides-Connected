@@ -6,13 +6,14 @@ Guides-Connected is a dynamic web application designed to connect educational ex
 
 ## Table of Contents
 
-- [Technology Stack](#Technology-Stack)
-- [Installation](#Installation)
-- [Usage](#Usage)
-- [Scripts](#Scripts)
-- [Dependencies](#Dependencies)
-- [Contributing](#Contributing)
-- [License](#License)
+- [Technology Stack](#technology-stack)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Scripts](#scripts)
+- [Dependencies](#dependencies)
+- [Mockups](#mockups)
+- [Deployment](#deployment)
+- [License](#license)
 
 ## Technology Stack
 
@@ -84,9 +85,28 @@ Server-side dependencies include:
 - `cloudinary`
 - [Other server dependencies]
 
-## Contributing
+## Mockups
 
-Please read [CONTRIBUTING.md](link to CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Include screenshots or mockups of the application here. This helps users and contributors visualize the user interface and functionality.
+
+- **Home Page**: ![Home Page Mockup](link-to-home-page-mockup)
+- **Profile Page**: ![Profile Page Mockup](link-to-profile-page-mockup)
+- [Other Mockups]
+
+## Deployment
+
+Provide the link to the live version of the application (if available) and any relevant instructions or information.
+
+- Live Application: [Deployment Link]
+- Additional Deployment [Deployment Link]
+
+Notes: [Any additional notes]
+
+- **React**: [React Official Site](https://reactjs.org/)
+- **Node.js**: [Node.js Official Site](https://nodejs.org/)
+- **Material-UI**: [Material-UI npm](https://www.npmjs.com/package/@mui/material)
+- **Helpful Article**: [Link to a helpful article or tutorial]
+- [Other Credits]
 
 ## License
 
