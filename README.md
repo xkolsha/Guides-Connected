@@ -11,6 +11,7 @@ Guides-Connected is a dynamic web application designed to connect educational ex
 - [Usage](#usage)
 - [Scripts](#scripts)
 - [Dependencies](#dependencies)
+- [Content Management System (CMS)](#Content-Management-System-(CMS))
 - [Mockups](#mockups)
 - [Deployment](#deployment)
 - [License](#license)
@@ -74,7 +75,6 @@ Client-side dependencies include:
 - `react`
 - `react-dom`
 - `react-router-dom`
-- [Other client dependencies]
 
 Server-side dependencies include:
 
@@ -83,7 +83,18 @@ Server-side dependencies include:
 - `mongoose`
 - `jsonwebtoken`
 - `cloudinary`
-- [Other server dependencies]
+
+## Content Management System (CMS)
+
+Guides-Connected now includes a CMS for admins to manage the database efficiently. The CMS is integrated into our existing technology stack and provides functionalities like user management, content management, database management, analytics, and reports.
+
+### Features:
+
+- **User-friendly Admin Dashboard**: Built with React for a smooth and intuitive user experience.
+- **Secure Login and Role-Based Access Control**: Ensures secure access and functionality based on user roles.
+- **Direct Database Interaction**: Capabilities for effective content management directly interacting with the database.
+- **Integrated Analytics**: For monitoring user engagement and content performance, providing valuable insights.
+- **Customizable and Extensible**: Designed to be flexible to cater to future needs and enhancements.
 
 ## Mockups
 
