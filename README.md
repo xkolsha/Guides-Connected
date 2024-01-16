@@ -116,9 +116,23 @@ Provide the link to the live version of the application (if available) and any r
 - **Live Application**: [https://guidesconnected.com/]
 - **GitHub Repo**: [Guides Connected Repository](https://github.com/xkolsha/Guides-Connected)
 
+## Built With
+
+- **Heroku**: [Heroku Official Site](https://www.heroku.com/)
 - **React**: [React Official Site](https://reactjs.org/)
+- **Vite**: [Vite Official Site](https://vitejs.dev/)
 - **Node.js**: [Node.js Official Site](https://nodejs.org/)
 - **Material-UI**: [Material-UI npm](https://www.npmjs.com/package/@mui/material)
+- **Styled Components**: [Styled Components npm](https://www.npmjs.com/package/styled-components)
+- **GraphQL**: [GraphQL Official Site](https://graphql.org/)
+- **Apollo**: [Apollo Official Site](https://www.apollographql.com/)
+- **MongoDB**: [MongoDB Official Site](https://www.mongodb.com/)
+- **Mongoose**: [Mongoose npm](https://www.npmjs.com/package/mongoose)
+- **Cloudinary**: [Cloudinary Official Site](https://cloudinary.com/)
+- **JSON Web Tokens**: [JWT npm](https://www.npmjs.com/package/jsonwebtoken)
+- **Bcryptjs**: [Bcryptjs npm](https://www.npmjs.com/package/bcryptjs)
+- **Nodemailer**: [Nodemailer npm](https://www.npmjs.com/package/nodemailer)
+- **Swiper**: [Swiper npm](https://www.npmjs.com/package/swiper)
 
 ## License
 
