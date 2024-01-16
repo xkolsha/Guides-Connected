@@ -11,7 +11,7 @@ Guides-Connected is a dynamic web application designed to connect educational ex
 - [Usage](#usage)
 - [Scripts](#scripts)
 - [Dependencies](#dependencies)
-- [Content Management System (CMS)](#Content-Management-System-(CMS))
+- [Content Management System (CMS)](<#Content-Management-System-(CMS)>)
 - [Mockups](#mockups)
 - [Deployment](#deployment)
 - [License](#license)
@@ -100,25 +100,28 @@ Guides-Connected now includes a CMS for admins to manage the database efficientl
 
 Include screenshots or mockups of the application here. This helps users and contributors visualize the user interface and functionality.
 
-- **Home Page**: ![Home Page Mockup](link-to-home-page-mockup)
-- **Profile Page**: ![Profile Page Mockup](link-to-profile-page-mockup)
-- [Other Mockups]
+<p float="left">
+  <img src="/client/public/MockupHome.png" width="45%" />
+  <img src="/client/public/MockupAbout.jpeg" width="45%" />
+</p>
+<p float="left">
+  <img src="/client/public/MockupExperts.png" width="45%" />
+  <img src="/client/public/MockupAdmin1.png" width="45%" />
+</p>
 
 ## Deployment
 
 Provide the link to the live version of the application (if available) and any relevant instructions or information.
 
-- Live Application: [Deployment Link]
-- Additional Deployment [Deployment Link]
-
-Notes: [Any additional notes]
+- **Live Application**: [https://guidesconnected.com/]
+- **GitHub Repo**: [Guides Connected Repository](https://github.com/xkolsha/Guides-Connected)
 
 - **React**: [React Official Site](https://reactjs.org/)
 - **Node.js**: [Node.js Official Site](https://nodejs.org/)
 - **Material-UI**: [Material-UI npm](https://www.npmjs.com/package/@mui/material)
-- **Helpful Article**: [Link to a helpful article or tutorial]
-- [Other Credits]
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+[`Aviad Kohn`](https://github.com/xkolsha)
