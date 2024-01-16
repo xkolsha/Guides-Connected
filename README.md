@@ -11,7 +11,7 @@ Guides-Connected is a dynamic web application designed to connect educational ex
 - [Usage](#usage)
 - [Scripts](#scripts)
 - [Dependencies](#dependencies)
-- [Content Management System (CMS)](<#Content-Management-System-(CMS)>)
+- [Content Management System (CMS)](#content-management-system-cms)
 - [Mockups](#mockups)
 - [Deployment](#deployment)
 - [License](#license)
